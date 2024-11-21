@@ -1,4 +1,4 @@
-﻿namespace PetidionD.Core.Models;
+﻿namespace PetitionD.Core.Models;
 
 public class GameCharacter
 {

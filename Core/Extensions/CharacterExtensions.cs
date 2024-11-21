@@ -1,7 +1,7 @@
 ﻿// File: Core/Extensions/CharacterExtensions.cs
-using PetidionD.Core.Models;
+using PetitionD.Core.Models;
 
-namespace PetidionD.Core.Extensions;
+namespace PetitionD.Core.Extensions;
 
 public static class CharacterExtensions
 {

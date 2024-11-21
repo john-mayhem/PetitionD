@@ -1,0 +1,359 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Dev\\PetitionD\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\core\\services\\gmstatusservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:core\\services\\gmstatusservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\core\\services\\assignlogic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:core\\services\\assignlogic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\infrastructure\\database\\repositories\\petitionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:infrastructure\\database\\repositories\\petitionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\core\\models\\petitionlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:core\\models\\petitionlist.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\infrastructure\\network\\packets\\petition\\checkoutpetitionpacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:infrastructure\\network\\packets\\petition\\checkoutpetitionpacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\core\\services\\templateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:core\\services\\templateservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\core\\services\\quotaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:core\\services\\quotaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\core\\models\\gmcharacter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:core\\models\\gmcharacter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\core\\models\\gamecharacter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:core\\models\\gamecharacter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\core\\extensions\\characterextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:core\\extensions\\characterextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\infrastructure\\database\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:infrastructure\\database\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\infrastructure\\database\\dbconnectionpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:infrastructure\\database\\dbconnectionpool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\infrastructure\\database\\databasemodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:infrastructure\\database\\databasemodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\infrastructure\\database\\sqlconnectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:infrastructure\\database\\sqlconnectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\infrastructure\\database\\repositories\\templaterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:infrastructure\\database\\repositories\\templaterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\infrastructure\\database\\repositories\\gmrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:infrastructure\\database\\repositories\\gmrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\core\\interfaces\\irepositorybase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:core\\interfaces\\irepositorybase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|d:\\dev\\petitiond\\petitiond.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{32B0F991-BFE8-45CA-A10F-2508B64DB7C2}|PetitionD.csproj|solutionrelative:petitiond.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CheckOutPetitionPacket.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Infrastructure\\Network\\Packets\\Petition\\CheckOutPetitionPacket.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Network\\Packets\\Petition\\CheckOutPetitionPacket.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Infrastructure\\Network\\Packets\\Petition\\CheckOutPetitionPacket.cs",
+              "RelativeToolTip": "Infrastructure\\Network\\Packets\\Petition\\CheckOutPetitionPacket.cs",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAkwFEAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:12:55.58Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TemplateService.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Core\\Services\\TemplateService.cs",
+              "RelativeDocumentMoniker": "Core\\Services\\TemplateService.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Core\\Services\\TemplateService.cs*",
+              "RelativeToolTip": "Core\\Services\\TemplateService.cs*",
+              "ViewState": "AgIAADYAAAAAAAAAAAA0wF0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:10:02.178Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GmStatusService.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Core\\Services\\GmStatusService.cs",
+              "RelativeDocumentMoniker": "Core\\Services\\GmStatusService.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Core\\Services\\GmStatusService.cs*",
+              "RelativeToolTip": "Core\\Services\\GmStatusService.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxIAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:09:41.265Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "QuotaService.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Core\\Services\\QuotaService.cs",
+              "RelativeDocumentMoniker": "Core\\Services\\QuotaService.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Core\\Services\\QuotaService.cs*",
+              "RelativeToolTip": "Core\\Services\\QuotaService.cs*",
+              "ViewState": "AgIAACgAAAAAAAAAAAAywD4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:09:21.252Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "GameCharacter.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Core\\Models\\GameCharacter.cs",
+              "RelativeDocumentMoniker": "Core\\Models\\GameCharacter.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Core\\Models\\GameCharacter.cs*",
+              "RelativeToolTip": "Core\\Models\\GameCharacter.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:07:55.316Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AssignLogic.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Core\\Services\\AssignLogic.cs",
+              "RelativeDocumentMoniker": "Core\\Services\\AssignLogic.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Core\\Services\\AssignLogic.cs*",
+              "RelativeToolTip": "Core\\Services\\AssignLogic.cs*",
+              "ViewState": "AgIAACcAAAAAAAAAAAAkwDsAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:07:01.542Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "GmCharacter.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Core\\Models\\GmCharacter.cs",
+              "RelativeDocumentMoniker": "Core\\Models\\GmCharacter.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Core\\Models\\GmCharacter.cs*",
+              "RelativeToolTip": "Core\\Models\\GmCharacter.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:05:53.868Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CharacterExtensions.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Core\\Extensions\\CharacterExtensions.cs",
+              "RelativeDocumentMoniker": "Core\\Extensions\\CharacterExtensions.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Core\\Extensions\\CharacterExtensions.cs*",
+              "RelativeToolTip": "Core\\Extensions\\CharacterExtensions.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:05:35.528Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "DbContext.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\DbContext.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Database\\DbContext.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\DbContext.cs*",
+              "RelativeToolTip": "Infrastructure\\Database\\DbContext.cs*",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAywFAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:00:55.023Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "DbConnectionPool.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\DbConnectionPool.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Database\\DbConnectionPool.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\DbConnectionPool.cs*",
+              "RelativeToolTip": "Infrastructure\\Database\\DbConnectionPool.cs*",
+              "ViewState": "AgIAAEsAAAAAAAAAAAA0wGgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:00:36.016Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "DatabaseModule.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\DatabaseModule.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Database\\DatabaseModule.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\DatabaseModule.cs*",
+              "RelativeToolTip": "Infrastructure\\Database\\DatabaseModule.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:00:24.945Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PetitionList.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Core\\Models\\PetitionList.cs",
+              "RelativeDocumentMoniker": "Core\\Models\\PetitionList.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Core\\Models\\PetitionList.cs*",
+              "RelativeToolTip": "Core\\Models\\PetitionList.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD4AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T05:47:08.623Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PetitionRepository.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\Repositories\\PetitionRepository.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Database\\Repositories\\PetitionRepository.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\Repositories\\PetitionRepository.cs*",
+              "RelativeToolTip": "Infrastructure\\Database\\Repositories\\PetitionRepository.cs*",
+              "ViewState": "AgIAAHIAAAAAAAAAAAA3wIYAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T05:55:13.119Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "SqlConnectionFactory.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\SqlConnectionFactory.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Database\\SqlConnectionFactory.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\SqlConnectionFactory.cs*",
+              "RelativeToolTip": "Infrastructure\\Database\\SqlConnectionFactory.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T06:00:15.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "TemplateRepository.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\Repositories\\TemplateRepository.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Database\\Repositories\\TemplateRepository.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\Repositories\\TemplateRepository.cs*",
+              "RelativeToolTip": "Infrastructure\\Database\\Repositories\\TemplateRepository.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T05:58:51.589Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Program.cs*",
+              "RelativeToolTip": "Program.cs*",
+              "ViewState": "AgIAACEAAAAAAAAAAAA2wDoAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T05:47:33.488Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "GmRepository.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\Repositories\\GmRepository.cs",
+              "RelativeDocumentMoniker": "Infrastructure\\Database\\Repositories\\GmRepository.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Infrastructure\\Database\\Repositories\\GmRepository.cs*",
+              "RelativeToolTip": "Infrastructure\\Database\\Repositories\\GmRepository.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T05:58:31.367Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "IRepositoryBase.cs",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\Core\\Interfaces\\IRepositoryBase.cs",
+              "RelativeDocumentMoniker": "Core\\Interfaces\\IRepositoryBase.cs",
+              "ToolTip": "D:\\Dev\\PetitionD\\Core\\Interfaces\\IRepositoryBase.cs",
+              "RelativeToolTip": "Core\\Interfaces\\IRepositoryBase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T05:58:16.442Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "PetitionD",
+              "DocumentMoniker": "D:\\Dev\\PetitionD\\PetitionD.csproj",
+              "RelativeDocumentMoniker": "PetitionD.csproj",
+              "ToolTip": "D:\\Dev\\PetitionD\\PetitionD.csproj",
+              "RelativeToolTip": "PetitionD.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-11-21T05:46:40.459Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ﻿using NC.PetitionLib;
 
-namespace PetidionD.Core.Models;
+namespace PetitionD.Core.Models;
 
 public class GmCharacter
 {
@@ -10,4 +10,5 @@ public class GmCharacter
     public string CharName { get; set; } = string.Empty;
     public int CharUid { get; set; }
     public Grade Grade { get; set; }
+    public int AssignCount { get; set; }  // Add this line
 }

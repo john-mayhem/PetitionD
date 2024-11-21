@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Dev\\PetidionD\\PetitionD.csproj": {}
+    "D:\\Dev\\PetitionD\\PetitionD.csproj": {}
   },
   "projects": {
-    "D:\\Dev\\PetidionD\\PetitionD.csproj": {
+    "D:\\Dev\\PetitionD\\PetitionD.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Dev\\PetidionD\\PetitionD.csproj",
+        "projectUniqueName": "D:\\Dev\\PetitionD\\PetitionD.csproj",
         "projectName": "PetitionD",
-        "projectPath": "D:\\Dev\\PetidionD\\PetitionD.csproj",
+        "projectPath": "D:\\Dev\\PetitionD\\PetitionD.csproj",
         "packagesPath": "C:\\Users\\maksi\\.nuget\\packages\\",
-        "outputPath": "D:\\Dev\\PetidionD\\obj\\",
+        "outputPath": "D:\\Dev\\PetitionD\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -49,6 +49,10 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.35, )"
+            },
             "Microsoft.Data.SqlClient": {
               "target": "Package",
               "version": "[5.2.2, )"
@@ -109,7 +113,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

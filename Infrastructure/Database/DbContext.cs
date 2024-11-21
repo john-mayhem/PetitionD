@@ -2,73 +2,63 @@
 using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace PetidionD.Infrastructure.Database;
+namespace PetitionD.Infrastructure.Database;
 
-public class DbContext
+public class DbContext : IAsyncDisposable
 {
-    private readonly ISqlConnectionFactory _connectionFactory;
+    private readonly DbConnectionPool _connectionPool;
     private readonly ILogger<DbContext> _logger;
+    private IDbConnection? _currentConnection;
 
     public DbContext(
-        ISqlConnectionFactory connectionFactory,
+        DbConnectionPool connectionPool,
         ILogger<DbContext> logger)
     {
-        _connectionFactory = connectionFactory;
+        _connectionPool = connectionPool;
         _logger = logger;
+    }
+
+    private async Task<IDbConnection> GetConnectionAsync(
+        CancellationToken cancellationToken = default)
+    {
+        if (_currentConnection != null)
+            return _currentConnection;
+
+        _currentConnection = await _connectionPool.GetConnectionAsync(cancellationToken);
+        return _currentConnection;
     }
 
     public async Task<T> ExecuteStoredProcAsync<T>(
         string procedureName,
         object parameters,
-        Func<SqlDataReader, Task<T>> mapper,
-        int commandTimeout = 30)
+        Func<SqlDataReader, CancellationToken, Task<T>> mapper,
+        CancellationToken cancellationToken = default)
     {
-        using var connection = await _connectionFactory.CreateConnectionAsync();
+        var connection = await GetConnectionAsync(cancellationToken);
         using var command = new SqlCommand(procedureName, (SqlConnection)connection)
         {
-            CommandType = CommandType.StoredProcedure,
-            CommandTimeout = commandTimeout
+            CommandType = CommandType.StoredProcedure
         };
 
         AddParameters(command, parameters);
 
-        try
-        {
-            using var reader = await command.ExecuteReaderAsync();
-            return await mapper(reader);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error executing stored procedure {ProcedureName} with parameters {@Parameters}",
-                procedureName, parameters);
-            throw new DatabaseException($"Error executing {procedureName}", ex);
-        }
+        using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        return await mapper(reader, cancellationToken);
     }
 
-    public async Task<int> ExecuteNonQueryAsync(
+    public async Task ExecuteStoredProcAsync(
         string procedureName,
         object parameters,
-        int commandTimeout = 30)
+        CancellationToken cancellationToken = default)
     {
-        using var connection = await _connectionFactory.CreateConnectionAsync();
+        var connection = await GetConnectionAsync(cancellationToken);
         using var command = new SqlCommand(procedureName, (SqlConnection)connection)
         {
-            CommandType = CommandType.StoredProcedure,
-            CommandTimeout = commandTimeout
+            CommandType = CommandType.StoredProcedure
         };
 
         AddParameters(command, parameters);
-
-        try
-        {
-            return await command.ExecuteNonQueryAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error executing stored procedure {ProcedureName} with parameters {@Parameters}",
-                procedureName, parameters);
-            throw new DatabaseException($"Error executing {procedureName}", ex);
-        }
+        await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
     private static void AddParameters(SqlCommand command, object parameters)
@@ -76,13 +66,16 @@ public class DbContext
         foreach (var prop in parameters.GetType().GetProperties())
         {
             var value = prop.GetValue(parameters);
-            var parameter = command.Parameters.AddWithValue($"@{prop.Name}", value ?? DBNull.Value);
+            command.Parameters.AddWithValue($"@{prop.Name}", value ?? DBNull.Value);
+        }
+    }
 
-            // Handle specific SQL types if needed
-            if (value is DateTime)
-                parameter.SqlDbType = SqlDbType.DateTime;
-            else if (value is byte)
-                parameter.SqlDbType = SqlDbType.TinyInt;
+    public async ValueTask DisposeAsync()
+    {
+        if (_currentConnection != null)
+        {
+            await _connectionPool.ReleaseConnectionAsync(_currentConnection);
+            _currentConnection = null;
         }
     }
 }

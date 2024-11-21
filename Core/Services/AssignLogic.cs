@@ -1,9 +1,10 @@
 ﻿// File: Core/Services/AssignLogic.cs
 using NC.PetitionLib;
-using PetidionD.Core.Models;
+using PetitionD.Core.Extensions;
+using PetitionD.Core.Models;
 using PetitionD.Configuration;
 
-namespace PetidionD.Core.Services;
+namespace PetitionD.Core.Services;
 
 public static class AssignLogic
 {
@@ -16,62 +17,85 @@ public static class AssignLogic
         _worldSessionManager = worldSessionManager;
     }
 
-    public static List<Petition> Assign(GmCharacter gmChar, out int assignCount)
+    public static List<Petition> Assign(int worldId)
     {
         var result = new List<Petition>();
-        assignCount = 0;
-
-        if (!Config.mEnableAssignment || gmChar.Grade > Grade.GMS)
+        if (!Config.mEnableAssignment || _worldSessionManager == null)
             return result;
+
+        var worldSession = _worldSessionManager.GetSession(worldId);
+        if (worldSession == null)
+            return result;
+
+        var availableGms = new List<GmCharacter>();
+        foreach (var gmSession in worldSession.GetGmSessions())
+        {
+            var character = gmSession.GetCharacter(worldId);
+            if (character.Grade <= Grade.GMS && character.AssignCount < Config.mMaxAssignmentPerGm)
+            {
+                availableGms.Add(character);
+            }
+        }
 
         if (_petitionList == null)
             return result;
 
-        lock (_petitionList)
-        {
-            var activePetitions = _petitionList.GetActivePetitionList(gmChar.WorldId);
-            var sortedPetitions = new SortedList<int, Petition>();
+        var activePetitions = _petitionList.GetActivePetitionList(worldId);
+        var unassignedPetitions = new List<Petition>();
 
-            foreach (var petition in activePetitions)
+        foreach (var petition in activePetitions)
+        {
+            if ((petition.State == State.Submit || petition.State == State.Undo)
+                && petition.Grade <= Grade.GMS)
             {
-                if (petition.Grade <= Grade.GMS)
+                if (petition.ForcedGm.CharUid != 0)
                 {
-                    if (petition.CheckOutGm.CharUid != 0)
+                    var gmSession = worldSession.GetGmSession(petition.ForcedGm.CharUid);
+                    if (gmSession != null)
                     {
-                        if (petition.CheckOutGm.CharUid == gmChar.CharUid)
+                        var character = gmSession.GetCharacter(petition.WorldId);
+                        if (character.AssignCount < Config.mMaxAssignmentPerGm)
                         {
-                            petition.AssignedGm = gmChar.ToGameCharacter();
-                            assignCount++;
-                        }
-                    }
-                    else if (petition.ForcedGm.CharUid != 0)
-                    {
-                        if (petition.ForcedGm.CharUid == gmChar.CharUid)
-                        {
-                            petition.AssignedGm = gmChar.ToGameCharacter();
-                            assignCount++;
+                            character.AssignCount++;
+                            gmSession.SetCharacter(petition.WorldId, character);
+                            petition.AssignedGm = character.ToGameCharacter();
                             result.Add(petition);
                         }
                     }
-                    else if (petition.AssignedGm.CharUid == 0)
-                    {
-                        sortedPetitions.Add(petition.PetitionId, petition);
-                    }
+                }
+                else if (petition.AssignedGm.CharUid == 0)
+                {
+                    unassignedPetitions.Add(petition);
                 }
             }
+        }
 
-            foreach (var petition in sortedPetitions.Values)
+        // Sort GMs by assignment count
+        availableGms.Sort((a, b) => a.AssignCount.CompareTo(b.AssignCount));
+
+        // Assign remaining petitions
+        foreach (var petition in unassignedPetitions)
+        {
+            if (availableGms.Count == 0)
+                break;
+
+            var selectedGm = availableGms[0];
+            if (selectedGm.AssignCount >= Config.mMaxAssignmentPerGm)
+                break;
+
+            selectedGm.AssignCount++;
+            var gmSession = worldSession.GetGmSession(selectedGm.CharUid);
+            if (gmSession != null)
             {
-                if (assignCount < Config.mMaxAssignmentPerGm)
+                gmSession.SetCharacter(worldId, selectedGm);
+                petition.AssignedGm = selectedGm.ToGameCharacter();
+                result.Add(petition);
+
+                // Re-sort GMs if needed
+                if (availableGms.Count > 1 && selectedGm.AssignCount > availableGms[1].AssignCount)
                 {
-                    lock (petition)
-                    {
-                        petition.AssignedGm = gmChar.ToGameCharacter();
-                        result.Add(petition);
-                        assignCount++;
-                    }
+                    availableGms.Sort((a, b) => a.AssignCount.CompareTo(b.AssignCount));
                 }
-                else break;
             }
         }
 

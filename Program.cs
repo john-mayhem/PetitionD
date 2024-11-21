@@ -9,9 +9,11 @@ using PetitionD.Core.Interfaces;
 using PetitionD.Services;
 using PetitionD.Configuration;
 using PetitionD.Infrastructure.Database;
-using PetidionD.Core.Interfaces;
-using PetidionD.Infrastructure.Database.Repositories;
-using PetidionD.Infrastructure.Database;
+using PetitionD.Core.Interfaces;
+using PetitionD.Infrastructure.Database.Repositories;
+using PetitionD.Infrastructure.Database;
+using PetitionD.Core.Models;
+using PetitionD.Core.Services;
 
 namespace PetitionD;
 
@@ -48,9 +50,14 @@ static class Program
         });
 
         // Core services
-        services.AddSingleton<IAuthService, AuthService>();
         services.AddSingleton<ISessionManager, SessionManager>();
         services.AddSingleton<PetitionList>();
+        services.AddSingleton<IAuthService, AuthService>();
+        services.AddSingleton<IPetitionService, PetitionService>();
+        services.AddDatabaseServices(settings);
+        services.AddSingleton<QuotaService>();
+        services.AddSingleton<GmStatusService>();
+        services.AddSingleton<TemplateService>();
 
 
         // Network services
@@ -75,7 +82,6 @@ static class Program
         services.AddSingleton<PetitionRepository>();
         services.AddSingleton<TemplateRepository>();
         services.AddSingleton<GmRepository>();
-
         services.AddSingleton<IPetitionService, PetitionService>();
 
         services.AddSingleton(sp => new NoticeService(
@@ -91,11 +97,12 @@ static class Program
 
         // UI Components
         services.AddSingleton<MainForm>();
+        PetitionList.InitializeSequence();
+        GmStatus.Clear();
     }
 }
 
-// Temporary mock class for testing
-// TODO: Move to separate file in Infrastructure/Database
+
 public class MockDbRepository(ILogger<MockDbRepository> logger) : IDbRepository
 {
     public Task<(bool IsValid, int AccountUid)> ValidateGmCredentialsAsync(string account, string password)

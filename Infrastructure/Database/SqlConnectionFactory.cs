@@ -2,7 +2,7 @@
 using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace PetidionD.Infrastructure.Database;
+namespace PetitionD.Infrastructure.Database;
 
 public interface ISqlConnectionFactory
 {

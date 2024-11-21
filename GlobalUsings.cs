@@ -1,0 +1,9 @@
+﻿// File: GlobalUsings.cs
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.DependencyInjection;
+global using System;
+global using System.Threading.Tasks;
+global using System.Collections.Generic;
+global using PetitionD.Infrastructure.Network;
+global using PetitionD.Infrastructure.Network.Sessions;
+global using PetitionD.Infrastructure.Network.Packets;

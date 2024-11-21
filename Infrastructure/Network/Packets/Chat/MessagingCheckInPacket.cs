@@ -1,13 +1,26 @@
 ﻿// File: Infrastructure/Network/Packets/Chat/MessagingCheckInPacket.cs
+namespace PetitionD.Infrastructure.Network.Packets.Chat;
+
+using Microsoft.Extensions.Logging;
 using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Core.Models;
-using PetitionD.Core.Models;
+using PetitionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Sessions;
 
-public class MessagingCheckInPacket(
-    ILogger<MessagingCheckInPacket> logger,
-    PetitionList petitionList) : GmPacketBase(PacketType.G_MESSAGING_CHECK_IN)
+public class MessagingCheckInPacket : GmPacketBase
 {
+    private readonly ILogger<MessagingCheckInPacket> _logger;
+    private readonly PetitionList _petitionList;
+
+    public MessagingCheckInPacket(
+        ILogger<MessagingCheckInPacket> logger,
+        PetitionList petitionList) : base(PacketType.G_MESSAGING_CHECK_IN)
+    {
+        _logger = logger;
+        _petitionList = petitionList;
+    }
+
     public override void Handle(GmSession session, Unpacker unpacker)
     {
         try
@@ -16,14 +29,20 @@ public class MessagingCheckInPacket(
             var flag = unpacker.GetUInt8();
             var message = unpacker.GetStringMax(MaxLen.PetMessage);
 
-            var petition = petitionList.GetPetition(petitionId);
+            var petition = _petitionList.GetPetition(petitionId);
             if (petition == null)
             {
                 SendResponse(session, petitionId, PetitionErrorCode.UnexpectedPetitionId);
                 return;
             }
 
-            var gmCharacter = session.GetCharacter(petition.mWorldId);
+            var gmCharacter = session.GetCharacter(petition.WorldId);
+            if (gmCharacter == null)
+            {
+                SendResponse(session, petitionId, PetitionErrorCode.NoRightToAccess);
+                return;
+            }
+
             var result = petition.BeginMessageCheckIn(gmCharacter, message, flag);
 
             if (result == PetitionErrorCode.Success)
@@ -31,7 +50,7 @@ public class MessagingCheckInPacket(
                 var worldResponse = new Packer((byte)PacketType.W_LEAVE_MESSAGE);
                 worldResponse.AddInt32(petitionId);
                 worldResponse.AddString(message);
-                // Send to world session
+                // TODO: Send to world session when WorldSessionManager is implemented
             }
             else
             {
@@ -40,7 +59,7 @@ public class MessagingCheckInPacket(
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error handling messaging check-in");
+            _logger.LogError(ex, "Error handling messaging check-in");
         }
     }
 

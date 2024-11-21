@@ -8,9 +8,9 @@ namespace PetitionD.Core.Models;
 
 public class PetitionList
 {
-    private readonly Dictionary<int, Petition> _activePetitions = new();
-    private readonly Dictionary<int, Dictionary<int, Petition>> _worldPetitions = new();
-    private readonly Dictionary<string, Petition> _completedPetitions = new();
+    private readonly Dictionary<int, Petition> _activePetitions = [];
+    private readonly Dictionary<int, Dictionary<int, Petition>> _worldPetitions = [];
+    private readonly Dictionary<string, Petition> _completedPetitions = [];
     private readonly ILogger<PetitionList> _logger;
     private static int _lastPetitionId;
     private static DateTime _lastPetitionSeqDate = DateTime.Today;
@@ -64,7 +64,7 @@ public class PetitionList
             if (!Category.IsValid(category))
                 return PetitionErrorCode.UnexpectedCategory;
 
-            if (_activePetitions.Count >= Config.mMaxActivePetition)
+            if (_activePetitions.Count >= Config.MaxActivePetition)
                 return PetitionErrorCode.TooManyPetitions;
 
             if (GetPetition(worldId, user.CharUid) != null)
@@ -87,7 +87,7 @@ public class PetitionList
             petition.QuotaAtSubmit = Quota.GetCurrentQuota(user.AccountUid);
             petition.QuotaAfterTreat = petition.QuotaAtSubmit + 1;
 
-            if (petition.QuotaAtSubmit >= Config.mMaxQuota)
+            if (petition.QuotaAtSubmit >= Config.MaxQuota)
                 return PetitionErrorCode.ExceedQuota;
 
             // Add to tracking collections
@@ -226,7 +226,7 @@ public class PetitionList
                 _completedPetitions.Remove(petition.PetitionSeq);
             }
 
-            if (oldPetitions.Any())
+            if (oldPetitions.Count != 0)
             {
                 _logger.LogInformation("Cleaned up {Count} old petitions", oldPetitions.Count);
             }

@@ -90,9 +90,7 @@ static class Program
             sp.GetRequiredService<AppSettings>()
         ));
 
-        // Mock services for initial testing 
-        services.AddSingleton<IDbRepository>(sp =>
-            new MockDbRepository(sp.GetRequiredService<ILogger<MockDbRepository>>()));
+
 
         // UI Components
         services.AddSingleton<MainForm>();
@@ -101,17 +99,3 @@ static class Program
     }
 }
 
-
-public class MockDbRepository(ILogger<MockDbRepository> logger) : IDbRepository
-{
-    public Task<(bool IsValid, int AccountUid)> ValidateGmCredentialsAsync(string account, string password)
-    {
-        logger.LogInformation("Mock validation for account: {Account}", account);
-
-        // For testing, accept any login with password "test"
-        var isValid = password == "test";
-        var accountUid = isValid ? 1 : 0;
-
-        return Task.FromResult((isValid, accountUid));
-    }
-}

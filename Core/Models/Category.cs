@@ -3,7 +3,7 @@ namespace PetitionD.Core.Models;
 
 public class Category
 {
-    private static readonly Dictionary<int, string> Categories = new();
+    private static readonly Dictionary<int, string> Categories = [];
 
     public static bool IsValid(int categoryId) => Categories.ContainsKey(categoryId);
 

@@ -24,39 +24,41 @@ public class DbConnectionPool : IAsyncDisposable
     public async Task<IDbConnection> GetConnectionAsync(
         CancellationToken cancellationToken = default)
     {
-        if (_isDisposed)
-            throw new ObjectDisposedException(nameof(DbConnectionPool));
-
-        await _poolSemaphore.WaitAsync(cancellationToken);
-
-        try
+        if (!_isDisposed)
         {
-            if (_connections.TryTake(out var connection))
+            await _poolSemaphore.WaitAsync(cancellationToken);
+
+            try
             {
-                if (connection.State == ConnectionState.Open)
-                    return connection;
+                if (_connections.TryTake(out var connection))
+                {
+                    if (connection.State == ConnectionState.Open)
+                        return connection;
 
-                try
-                {
-                    connection.Open();
-                    return connection;
+                    try
+                    {
+                        connection.Open();
+                        return connection;
+                    }
+                    catch
+                    {
+                        await ReleaseConnectionAsync(connection);
+                        throw;
+                    }
                 }
-                catch
-                {
-                    await ReleaseConnectionAsync(connection);
-                    throw;
-                }
+
+                // Create new connection if pool isn't full
+                connection = await _connectionFactory.CreateConnectionAsync();
+                return connection;
             }
+            catch
+            {
+                _poolSemaphore.Release();
+                throw;
+            }
+        }
 
-            // Create new connection if pool isn't full
-            connection = await _connectionFactory.CreateConnectionAsync();
-            return connection;
-        }
-        catch
-        {
-            _poolSemaphore.Release();
-            throw;
-        }
+        throw new ObjectDisposedException(nameof(DbConnectionPool));
     }
 
     public async Task ReleaseConnectionAsync(IDbConnection connection)

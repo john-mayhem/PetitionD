@@ -3,6 +3,7 @@ using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Configuration;
 using PetitionD.Core.Models;
+using PetitionD.Core.Services;
 
 namespace PetitionD.Infrastructure.Network.Packets.Petition;
 
@@ -45,8 +46,8 @@ public class UndoCheckOutPacket(
                 // Notify World Server
                 var worldResponse = new Packer((byte)PacketType.W_NOTIFY_FINISH2);
                 worldResponse.AddInt32(petitionId);
-                worldResponse.AddUInt8((byte)Config.mMaxQuota);
-                worldResponse.AddUInt8((byte)petition.mQuotaAfterTreat);
+                worldResponse.AddUInt8((byte)Config.MaxQuota);
+                worldResponse.AddUInt8((byte)petition.QuotaAfterTreat);
                 worldResponse.AddUInt8((byte)result);
                 worldSession.Send(worldResponse.ToArray());
 
@@ -58,7 +59,7 @@ public class UndoCheckOutPacket(
                 worldSession.BroadcastToGmExcept(notification.ToArray(), session);
 
                 // Handle reassignments
-                var reassignedPetitions = AssignLogic.Assign(petition.mWorldId);
+                var reassignedPetitions = AssignLogic.Assign(petition.WorldId);
                 foreach (var reassigned in reassignedPetitions)
                 {
                     NotifyReassignment(worldSession, reassigned);

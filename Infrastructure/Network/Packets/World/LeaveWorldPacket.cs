@@ -1,14 +1,20 @@
 ﻿// File: Infrastructure/Network/Packets/World/LeaveWorldPacket.cs
+namespace PetitionD.Infrastructure.Network.Packets.World;
+
+using Microsoft.Extensions.Logging;
 using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Sessions;
 
-namespace PetitionD.Infrastructure.Network.Packets.World;
-
-public class LeaveWorldPacket(ILogger<LeaveWorldPacket> logger) : GmPacketBase(PacketType.G_LEAVE_WORLD)
+public class LeaveWorldPacket : GmPacketBase
 {
+    private readonly ILogger<LeaveWorldPacket> _logger;
 
-
+    public LeaveWorldPacket(ILogger<LeaveWorldPacket> logger) : base(PacketType.G_LEAVE_WORLD)
+    {
+        _logger = logger;
+    }
 
     public override void Handle(GmSession session, Unpacker unpacker)
     {

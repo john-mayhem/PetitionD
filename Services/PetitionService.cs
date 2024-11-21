@@ -1,22 +1,26 @@
 ﻿// File: Services/PetitionService.cs
+namespace PetitionD.Services;
+
+using Microsoft.Extensions.Logging;
 using NC.PetitionLib;
 using PetitionD.Core.Interfaces;
 using PetitionD.Core.Models;
+using PetitionD.Core.Services;
 using PetitionD.Infrastructure.Database.Repositories;
 
 public class PetitionService : IPetitionService
 {
     private readonly PetitionRepository _petitionRepository;
-    private readonly GmRepository _gmRepository;
+    private readonly QuotaService _quotaService;
     private readonly ILogger<PetitionService> _logger;
 
     public PetitionService(
         PetitionRepository petitionRepository,
-        GmRepository gmRepository,
+        QuotaService quotaService,
         ILogger<PetitionService> logger)
     {
         _petitionRepository = petitionRepository;
-        _gmRepository = gmRepository;
+        _quotaService = quotaService;
         _logger = logger;
     }
 
@@ -25,21 +29,21 @@ public class PetitionService : IPetitionService
         try
         {
             // Validate and set initial state
-            petition.mState = State.Submit;
-            petition.mSubmitTime = DateTime.Now;
+            petition.State = State.Submit;
+            petition.SubmitTime = DateTime.Now;
 
             // Create petition
-            var result = await _petitionRepository.CreatePetitionAsync(petition);
-            if (result == PetitionErrorCode.Success)
+            var (errorCode, _) = await _petitionRepository.CreatePetitionAsync(petition);
+            if (errorCode == PetitionErrorCode.Success)
             {
                 // Update quota if needed
-                if (petition.mForcedGm.CharUid == 0)
+                if (petition.ForcedGm.CharUid == 0)
                 {
-                    await UpdateQuotaAsync(petition.mUser.AccountUid, 1);
+                    await _quotaService.UpdateQuotaAsync(petition.User.AccountUid, 1);
                 }
             }
 
-            return result;
+            return errorCode;
         }
         catch (Exception ex)
         {

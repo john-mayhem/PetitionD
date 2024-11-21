@@ -1,7 +1,9 @@
 ﻿// File: Infrastructure/Network/Packets/Base/GmPacketBase.cs
+namespace PetitionD.Infrastructure.Network.Packets.Base;
+
 using NC.PetitionLib;
-using PetitionD.Core.Models;
 using NC.ToolNet.Net;
+using PetitionD.Infrastructure.Network.Sessions;
 
 public abstract class GmPacketBase(PacketType packetType)
 {

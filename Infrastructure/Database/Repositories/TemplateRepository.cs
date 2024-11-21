@@ -50,7 +50,7 @@ public class TemplateRepository
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to get templates for GM {GmAccountUid}", gmAccountUid);
-            return Enumerable.Empty<Template>();
+            return [];
         }
     }
 

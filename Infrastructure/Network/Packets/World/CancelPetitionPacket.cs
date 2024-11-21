@@ -75,8 +75,8 @@ public class CancelPetitionPacket(
         response.AddASCIIString(petition.mPetitionSeq, MaxLen.PetitionSeq);
         response.AddString(petition.mForcedGm.CharName, MaxLen.CharName);
         response.AddInt32(petition.mForcedGm.CharUid);
-        response.AddUInt8((byte)Config.mMaxQuota);
-        response.AddUInt8((byte)(Config.mMaxQuota - petition.mQuotaAfterTreat));
+        response.AddUInt8((byte)Config.MaxQuota);
+        response.AddUInt8((byte)(Config.MaxQuota - petition.mQuotaAfterTreat));
         session.Send(response.ToArray());
     }
 
@@ -97,7 +97,7 @@ public class CancelPetitionPacket(
         response.AddInt32(userCharUid);
         response.AddString(forcedGm?.CharName ?? string.Empty, MaxLen.CharName);
         response.AddInt32(forcedGm?.CharUid ?? 0);
-        response.AddUInt8((byte)Config.mMaxQuota);
+        response.AddUInt8((byte)Config.MaxQuota);
         response.AddUInt8(0); // Current quota
         session.Send(response.ToArray());
     }

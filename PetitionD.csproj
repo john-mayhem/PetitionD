@@ -32,7 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\Database\StoredProcedures\" />
+    <Folder Include="Infrastructure\Database\StoredProcedures\Maintenance\" />
+    <Folder Include="Infrastructure\Database\Tables\" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@ public class GmCharacter : GameCharacter  // Make it inherit from GameCharacter
     public Grade Grade { get; set; }
     public int AssignCount { get; set; }
 
-    public static GmCharacter Empty() => new()
+    public static new GmCharacter Empty() => new()
     {
         AccountName = string.Empty,
         AccountUid = 0,

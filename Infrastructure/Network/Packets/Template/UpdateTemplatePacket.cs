@@ -20,7 +20,6 @@ public class UpdateTemplatePacket(ILogger<UpdateTemplatePacket> logger)
             var content = unpacker.GetStringMax(MaxLen.TemplateContent);
             var order = unpacker.GetInt32();
 
-            int resultCode;
             var result = Template.Update(
                 session.AccountUid,
                 session.Account,
@@ -29,7 +28,7 @@ public class UpdateTemplatePacket(ILogger<UpdateTemplatePacket> logger)
                 type,
                 content,
                 order,
-                out resultCode);
+                out int resultCode);
 
             var response = new Packer((byte)PacketType.G_UPDATE_TEMPLATE_RESULT);
             response.AddUInt8((byte)result);

@@ -40,7 +40,6 @@ public class SubmitPetitionPacket(
             var info = new Lineage2Info();
             info.Unpack(unpacker);
 
-            Petition newPetition;
             var result = petitionList.CreatePetition(
                 worldSession.WorldId,
                 category,
@@ -48,7 +47,7 @@ public class SubmitPetitionPacket(
                 content,
                 forcedGm,
                 info,
-                out newPetition);
+                out Packets.Petition newPetition);
 
             if (result == PetitionErrorCode.Success)
             {
@@ -75,8 +74,8 @@ public class SubmitPetitionPacket(
         response.AddUInt16((ushort)petition.GetActivePetitionCount());
         response.AddString(petition.mForcedGm.CharName, MaxLen.CharName);
         response.AddInt32(petition.mForcedGm.CharUid);
-        response.AddUInt8((byte)Config.mMaxQuota);
-        response.AddUInt8((byte)(Config.mMaxQuota - petition.mQuotaAtSubmit - 1));
+        response.AddUInt8((byte)Config.MaxQuota);
+        response.AddUInt8((byte)(Config.MaxQuota - petition.mQuotaAtSubmit - 1));
         session.Send(response.ToArray());
     }
 
@@ -92,7 +91,7 @@ public class SubmitPetitionPacket(
         response.AddUInt8((byte)errorCode);
         response.AddString(forcedGm.CharName, MaxLen.CharName);
         response.AddInt32(forcedGm.CharUid);
-        response.AddUInt8((byte)Config.mMaxQuota);
+        response.AddUInt8((byte)Config.MaxQuota);
         response.AddUInt8((byte)Quota.GetCurrentQuota(user.AccountUid));
         session.Send(response.ToArray());
     }

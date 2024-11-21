@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PetitionD.Core.Models;
 
+
 namespace PetitionD.Infrastructure.Network.Packets.Template
 {
     public class DownloadTemplatePacket(
@@ -22,12 +23,11 @@ namespace PetitionD.Infrastructure.Network.Packets.Template
             {
                 var code = unpacker.GetInt32();
 
-                int resultCode;
                 var result = Template.Download(
                     session.AccountUid,
                     session.Account,
                     code,
-                    out resultCode);
+                    out int resultCode);
 
                 var response = new Packer((byte)PacketType.G_DOWNLOAD_TEMPLATE_RESULT);
                 response.AddUInt8((byte)result);

@@ -3,57 +3,60 @@ using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Core.Models;
 
-public class ForwardingPacket(
-    ILogger<ForwardingPacket> logger,
-    PetitionList petitionList,
-    WorldSessionManager worldSessionManager) : GmPacketBase(PacketType.G_FORWARDING)
+namespace PetitionD.Infrastructure.Network.Packets.Petition
 {
-    public override void Handle(GmSession session, Unpacker unpacker)
+    public class ForwardingPacket(
+        ILogger<ForwardingPacket> logger,
+        PetitionList petitionList,
+        WorldSessionManager worldSessionManager) : GmPacketBase(PacketType.G_FORWARDING)
     {
-        try
+        public override void Handle(GmSession session, Unpacker unpacker)
         {
-            var petitionId = unpacker.GetInt32();
-            var flag = unpacker.GetUInt8();
-            var newGrade = (Grade)unpacker.GetUInt8();
-
-            var petition = petitionList.GetPetition(petitionId);
-            if (petition == null)
+            try
             {
-                SendResponse(session, petitionId, PetitionErrorCode.UnexpectedPetitionId);
-                return;
+                var petitionId = unpacker.GetInt32();
+                var flag = unpacker.GetUInt8();
+                var newGrade = (Grade)unpacker.GetUInt8();
+
+                var petition = petitionList.GetPetition(petitionId);
+                if (petition == null)
+                {
+                    SendResponse(session, petitionId, PetitionErrorCode.UnexpectedPetitionId);
+                    return;
+                }
+
+                var gmCharacter = session.GetCharacter(petition.mWorldId);
+                var result = petition.ForwardCheckIn(gmCharacter, newGrade, flag);
+
+                SendResponse(session, petitionId, result);
+
+                if (result == PetitionErrorCode.Success)
+                {
+                    var notification = new Packer((byte)PacketType.G_NOTIFY_FORWARDING);
+                    notification.AddInt32(petitionId);
+                    notification.AddUInt8(flag);
+                    notification.AddString(gmCharacter.CharName);
+                    notification.AddDateTime(DateTime.Now);
+                    notification.AddUInt8((byte)newGrade);
+                    worldSessionManager.GetSession(petition.mWorldId)?.BroadcastToGmExcept(notification.ToArray(), session);
+                }
             }
-
-            var gmCharacter = session.GetCharacter(petition.mWorldId);
-            var result = petition.ForwardCheckIn(gmCharacter, newGrade, flag);
-
-            SendResponse(session, petitionId, result);
-
-            if (result == PetitionErrorCode.Success)
+            catch (Exception ex)
             {
-                var notification = new Packer((byte)PacketType.G_NOTIFY_FORWARDING);
-                notification.AddInt32(petitionId);
-                notification.AddUInt8(flag);
-                notification.AddString(gmCharacter.CharName);
-                notification.AddDateTime(DateTime.Now);
-                notification.AddUInt8((byte)newGrade);
-                worldSessionManager.GetSession(petition.mWorldId)?.BroadcastToGmExcept(notification.ToArray(), session);
+                logger.LogError(ex, "Error handling petition forwarding");
             }
         }
-        catch (Exception ex)
+
+        private static void SendResponse(GmSession session, int petitionId, PetitionErrorCode errorCode)
         {
-            logger.LogError(ex, "Error handling petition forwarding");
+            var response = new Packer((byte)PacketType.G_ACCEPT_FORWARDING);
+            response.AddInt32(petitionId);
+            response.AddDateTime(DateTime.Now);
+            response.AddUInt8((byte)errorCode);
+            session.Send(response.ToArray());
         }
-    }
 
-    private static void SendResponse(GmSession session, int petitionId, PetitionErrorCode errorCode)
-    {
-        var response = new Packer((byte)PacketType.G_ACCEPT_FORWARDING);
-        response.AddInt32(petitionId);
-        response.AddDateTime(DateTime.Now);
-        response.AddUInt8((byte)errorCode);
-        session.Send(response.ToArray());
+        public override byte[] Serialize() =>
+            new Packer((byte)PacketType.G_FORWARDING).ToArray();
     }
-
-    public override byte[] Serialize() =>
-        new Packer((byte)PacketType.G_FORWARDING).ToArray();
 }

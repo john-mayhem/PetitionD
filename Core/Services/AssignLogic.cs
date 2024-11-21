@@ -21,7 +21,7 @@ public static class AssignLogic
     public static List<Petition> Assign(int worldId)
     {
         var result = new List<Petition>();
-        if (!Config.mEnableAssignment || _worldSessionManager == null)
+        if (!Config.EnableAssignment || _worldSessionManager == null)
             return result;
 
         var worldSession = _worldSessionManager.GetSession(worldId);
@@ -32,7 +32,7 @@ public static class AssignLogic
         foreach (var gmSession in worldSession.GetGmSessions())
         {
             var character = gmSession.GetCharacter(worldId);
-            if (character.Grade <= Grade.GMS && character.AssignCount < Config.mMaxAssignmentPerGm)
+            if (character.Grade <= Grade.GMS && character.AssignCount < Config.MaxAssignmentPerGm)
             {
                 availableGms.Add(character);
             }
@@ -55,7 +55,7 @@ public static class AssignLogic
                     if (gmSession != null)
                     {
                         var character = gmSession.GetCharacter(petition.WorldId);
-                        if (character.AssignCount < Config.mMaxAssignmentPerGm)
+                        if (character.AssignCount < Config.MaxAssignmentPerGm)
                         {
                             character.AssignCount++;
                             gmSession.SetCharacter(petition.WorldId, character);
@@ -81,7 +81,7 @@ public static class AssignLogic
                 break;
 
             var selectedGm = availableGms[0];
-            if (selectedGm.AssignCount >= Config.mMaxAssignmentPerGm)
+            if (selectedGm.AssignCount >= Config.MaxAssignmentPerGm)
                 break;
 
             selectedGm.AssignCount++;
@@ -105,7 +105,7 @@ public static class AssignLogic
 
     public static bool CanCheckOut(Petition petition, GmCharacter gmChar)
     {
-        if (!Config.mEnableAssignment)
+        if (!Config.EnableAssignment)
             return true;
 
         return petition.AssignedGm.CharUid == 0
@@ -115,7 +115,7 @@ public static class AssignLogic
 
     public static bool CheckOut(Petition petition, GmCharacter gmChar)
     {
-        if (!Config.mEnableAssignment)
+        if (!Config.EnableAssignment)
         {
             Reset(petition);
         }
@@ -132,7 +132,7 @@ public static class AssignLogic
     public static List<Petition> Reset(GmCharacter gmChar)
     {
         var result = new List<Petition>();
-        if (!Config.mEnableAssignment)
+        if (!Config.EnableAssignment)
             return result;
 
         if (_petitionList == null)
@@ -160,7 +160,7 @@ public static class AssignLogic
 
     public static bool Reset(Petition petition)
     {
-        if (!Config.mEnableAssignment)
+        if (!Config.EnableAssignment)
             return false;
 
         if (_worldSessionManager == null)
@@ -191,21 +191,21 @@ public static class AssignLogic
 
     public static GameCharacter GetAvailableGm(Petition petition, int worldId)
     {
-        if (!Config.mEnableAssignment || _worldSessionManager == null)
+        if (!Config.EnableAssignment || _worldSessionManager == null)
             return new GameCharacter();
 
         var worldSession = _worldSessionManager.GetSession(worldId);
         if (worldSession == null)
             return new GameCharacter();
 
-        var minAssignCount = Config.mMaxAssignmentPerGm;
+        var minAssignCount = Config.MaxAssignmentPerGm;
         GmCharacter? selectedGm = null;
         GmSession? selectedSession = null;
 
         foreach (var gmSession in worldSession.GetGmSessions())
         {
             var character = gmSession.GetCharacter(worldId);
-            if (character.AssignCount >= Config.mMaxAssignmentPerGm)
+            if (character.AssignCount >= Config.MaxAssignmentPerGm)
                 continue;
 
             if (petition.ForcedGm.CharUid != 0)

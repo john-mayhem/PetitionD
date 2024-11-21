@@ -24,35 +24,34 @@ public class CheckOutPetitionPacket(
                 return;
             }
 
-            var worldSession = worldSessionManager.GetSession(petition.mWorldId);
+            var worldSession = worldSessionManager.GetSession(petition.WorldId);
             if (worldSession == null)
             {
                 SendResponse(session, petitionId, DateTime.Now, PetitionErrorCode.WorldDown);
                 return;
             }
 
-            var gmCharacter = session.GetCharacter(petition.mWorldId);
-            bool unAssigned;
-            var result = petition.CheckOut(gmCharacter, out unAssigned);
+            var gmCharacter = session.GetCharacter(petition.WorldId);
+            var result = petition.CheckOut(gmCharacter, out bool unAssigned);
 
-            SendResponse(session, petitionId, petition.mCheckOutTime, result);
+            SendResponse(session, petitionId, petition.CheckOutTime, result);
 
             if (result == PetitionErrorCode.Success)
             {
                 // Notify world server
                 var worldResponse = new Packer((byte)PacketType.W_NOTIFY_CHECK_OUT);
                 worldResponse.AddInt32(petitionId);
-                worldResponse.AddString(petition.mCheckOutGm.CharName, MaxLen.CharName);
-                worldResponse.AddString(petition.mUser.CharName, MaxLen.CharName);
-                worldResponse.AddInt32(petition.mCheckOutGm.CharUid);
-                worldResponse.AddInt32(petition.mUser.CharUid);
+                worldResponse.AddString(petition.CheckOutGm.CharName, MaxLen.CharName);
+                worldResponse.AddString(petition.User.CharName, MaxLen.CharName);
+                worldResponse.AddInt32(petition.CheckOutGm.CharUid);
+                worldResponse.AddInt32(petition.User.CharUid);
                 worldSession.Send(worldResponse.ToArray());
 
                 // Notify other GMs
                 var gmNotification = new Packer((byte)PacketType.G_NOTIFY_CHECK_OUT);
                 gmNotification.AddInt32(petitionId);
-                gmNotification.AddString(petition.mCheckOutGm.CharName);
-                gmNotification.AddDateTime(petition.mCheckOutTime);
+                gmNotification.AddString(petition.CheckOutGm.CharName);
+                gmNotification.AddDateTime(petition.CheckOutTime);
                 worldSession.BroadcastToGmExcept(gmNotification.ToArray(), session);
 
                 if (unAssigned)
@@ -61,7 +60,7 @@ public class CheckOutPetitionPacket(
                 }
 
                 // Handle reassignments
-                var reassignedPetitions = AssignLogic.Assign(petition.mWorldId);
+                var reassignedPetitions = AssignLogic.Assign(petition.WorldId);
                 foreach (var reassigned in reassignedPetitions)
                 {
                     NotifyReassignment(worldSession, reassigned);

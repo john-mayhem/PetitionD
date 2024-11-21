@@ -173,10 +173,10 @@ public class GmSession : BaseSession
     {
         lock (_loginWorldList)
         {
-            if (!_loginWorldList.ContainsKey(worldId))
+            if (!_loginWorldList.TryGetValue(worldId, out GmCharacter? value))
                 return PetitionErrorCode.GMAlreadyLeaved;
 
-            var character = _loginWorldList[worldId];
+            var character = value;
             _loginWorldList.Remove(worldId);
             GmStatus.Remove(worldId, character.CharName);
             return PetitionErrorCode.Success;

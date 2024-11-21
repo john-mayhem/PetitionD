@@ -21,7 +21,7 @@ public static class ConfigurationExtensions
         if (settings.WorldServicePort <= 0)
             errors.Add("WorldServicePort must be greater than 0");
 
-        if (errors.Any())
+        if (errors.Count != 0)
             throw new InvalidOperationException(
                 $"Configuration validation failed:{Environment.NewLine}" +
                 string.Join(Environment.NewLine, errors));

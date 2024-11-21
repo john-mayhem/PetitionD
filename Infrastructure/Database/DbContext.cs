@@ -1,8 +1,8 @@
 ﻿// File: Infrastructure/Database/DbContext.cs
+namespace PetitionD.Infrastructure.Database;
+
 using Microsoft.Data.SqlClient;
 using System.Data;
-
-namespace PetitionD.Infrastructure.Database;
 
 public class DbContext : IAsyncDisposable
 {
@@ -37,7 +37,8 @@ public class DbContext : IAsyncDisposable
         var connection = await GetConnectionAsync(cancellationToken);
         using var command = new SqlCommand(procedureName, (SqlConnection)connection)
         {
-            CommandType = CommandType.StoredProcedure
+            CommandType = CommandType.StoredProcedure,
+            CommandTimeout = 30  // TODO: Make configurable
         };
 
         AddParameters(command, parameters);

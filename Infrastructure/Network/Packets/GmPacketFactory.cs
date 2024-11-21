@@ -7,7 +7,6 @@ using PetitionD.Infrastructure.Network.Packets.Petition;
 using PetitionD.Infrastructure.Network.Packets.World;
 using PetitionD.Infrastructure.Network.Packets.Chat;
 using PetitionD.Infrastructure.Network.Packets.Template;
-using PetitionD.Infrastructure.Network.Packets.World;
 
 namespace PetitionD.Infrastructure.Network.Packets;
 

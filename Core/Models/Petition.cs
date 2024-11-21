@@ -48,8 +48,8 @@ public class Petition
     public string FeedbackComment { get; set; } = string.Empty;
 
     // Lists
-    public List<PetitionHistory> History { get; set; } = new();
-    public List<PetitionMemo> Memos { get; set; } = new();
+    public List<PetitionHistory> History { get; set; } = [];
+    public List<PetitionMemo> Memos { get; set; } = [];
 
     public PetitionErrorCode ChattingCheckIn(GmCharacter gmChar, byte flag)
     {

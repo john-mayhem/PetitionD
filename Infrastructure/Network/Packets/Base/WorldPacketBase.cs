@@ -1,9 +1,9 @@
+// File: Infrastructure/Network/Packets/Base/WorldPacketBase.cs
+namespace PetitionD.Infrastructure.Network.Packets.Base;
+
 using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Sessions;
-using PetitionD.Core.Models;
-
-namespace PetitionD.Infrastructure.Network.Packets.Base;
 
 public abstract class WorldPacketBase
 {

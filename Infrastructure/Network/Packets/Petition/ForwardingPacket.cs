@@ -1,7 +1,7 @@
 ﻿// File: Infrastructure/Network/Packets/Petition/ForwardingPacket.cs
 using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Core.Models;
+using PetitionD.Core.Models;
 
 public class ForwardingPacket(
     ILogger<ForwardingPacket> logger,

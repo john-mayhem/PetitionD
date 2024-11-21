@@ -13,14 +13,14 @@ public class WorldSession : BaseSession
     private readonly AppSettings _settings;
     private readonly GmPacketFactory _packetFactory;
 
-    public int WorldId { get; private set; }
-    public string WorldName { get; private set; } = "Unknown";
+    public int WorldId { get; internal set; }
+    public string WorldName { get; internal set; } = "Unknown";
+    public WorldSessionState State { get; internal set; } = WorldSessionState.Init;
     public bool IsNormalShutdown { get; private set; }
     public string Notice { get; private set; } = string.Empty;
     public byte[]? OneTimeKey { get; private set; }
-    public DateTime LastOnlineCheckTime { get; private set; }
+    public DateTime LastOnlineCheckTime { get; internal set; }
 
-    public WorldSessionState State { get; private set; } = WorldSessionState.Init;
     private readonly ConcurrentDictionary<int, GmSession> _gmSessions = new();
 
     public WorldSession(
@@ -155,6 +155,11 @@ public class WorldSession : BaseSession
     }
 
     public override string ToString() => $"[World: {WorldName}({WorldId})]";
+
+    protected override void OnSendFailed(Exception e)
+    {
+        _logger.LogError(e, "Failed to send world packet");
+    }
 }
 
 public enum WorldSessionState

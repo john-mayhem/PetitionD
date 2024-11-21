@@ -2,6 +2,7 @@
 using NC.PetitionLib;
 using PetitionD.Core.Services;
 using PetitionD.Configuration;
+using PetitionD.Core.Enums;
 
 namespace PetitionD.Core.Models;
 

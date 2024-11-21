@@ -63,7 +63,6 @@ static class Program
         // Network services
         services.AddSingleton<PacketHandler>();
         services.AddSingleton<WorldSessionManager>();
-        services.AddSingleton<ISessionManager, SessionManager>();
 
         //Service Endpoints
         services.AddSingleton(sp => new GmService(

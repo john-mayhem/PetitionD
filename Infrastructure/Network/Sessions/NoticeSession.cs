@@ -110,5 +110,11 @@ public class NoticeSession : BaseSession
         _logger.LogInformation("Notice Session stopped: {Id} from {RemoteIp}", Id, RemoteIp);
     }
 
+
     public override string ToString() => $"[Notice {RemoteIp}]";
+
+    protected override void OnSendFailed(Exception e)
+    {
+        _logger.LogError(e, "Failed to send notice packet");
+    }
 }

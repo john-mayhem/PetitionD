@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace PetitionD.Core.Enums;
 
-namespace PetidionD.Core.Enums
+public enum PetitionState
 {
-    internal class PetitionState
-    {
-    }
+    New,
+    Submitted,
+    InProgress,
+    CheckedOut,
+    UnderReview,
+    Resolved,
+    Closed,
+    Cancelled,
+    Forwarded,
+    RequiresAttention
 }

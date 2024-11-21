@@ -4,6 +4,7 @@ using PetitionD.Core.Models;
 using System.Data;
 using System.Transactions;
 using Dapper;
+using PetitionD.Core.Enums;
 
 namespace PetitionD.Infrastructure.Database.Repositories;
 

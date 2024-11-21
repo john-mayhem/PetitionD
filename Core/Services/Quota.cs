@@ -1,5 +1,5 @@
-﻿// File: Core/Services/Quota.cs
-namespace PetidionD.Core.Services;
+// File: Core/Services/Quota.cs
+namespace PetitionD.Core.Services;
 
 public static class Quota
 {

@@ -1,12 +1,12 @@
 ﻿// File: Infrastructure/Network/Packets/GmPacketFactory.cs
 using NC.PetitionLib;
 using Microsoft.Extensions.DependencyInjection;
-using PetidionD.Infrastructure.Network.Packets.Base;
-using PetidionD.Infrastructure.Network.Packets.Auth;
-using PetidionD.Infrastructure.Network.Packets.Petition;
-using PetidionD.Infrastructure.Network.Packets.World;
-using PetidionD.Infrastructure.Network.Packets.Chat;
-using PetidionD.Infrastructure.Network.Packets.Template;
+using PetitionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Packets.Auth;
+using PetitionD.Infrastructure.Network.Packets.Petition;
+using PetitionD.Infrastructure.Network.Packets.World;
+using PetitionD.Infrastructure.Network.Packets.Chat;
+using PetitionD.Infrastructure.Network.Packets.Template;
 using PetitionD.Infrastructure.Network.Packets.World;
 
 namespace PetitionD.Infrastructure.Network.Packets;

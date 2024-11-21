@@ -1,9 +1,9 @@
-﻿// File: Infrastructure/Database/IDbRepository.cs
+// File: Infrastructure/Database/IDbRepository.cs
 using NC.PetitionLib;
-using PetidionD.Core.Enums;
-using PetidionD.Core.Models;
+using PetitionD.Core.Enums;
+using PetitionD.Core.Models;
 
-namespace PetidionD.Infrastructure.Database;
+namespace PetitionD.Infrastructure.Database;
 
 public interface IDbRepository
 {

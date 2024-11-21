@@ -1,5 +1,5 @@
-﻿// File: Core/Models/PetitionMemo.cs
-namespace PetidionD.Core.Models;
+// File: Core/Models/PetitionMemo.cs
+namespace PetitionD.Core.Models;
 
 public class PetitionMemo
 {

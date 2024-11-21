@@ -1,10 +1,11 @@
-﻿// File: Infrastructure/Network/Packets/Chat/ChattingCheckInPacket.cs
+// File: Infrastructure/Network/Packets/Chat/ChattingCheckInPacket.cs
 using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Core.Models;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Core.Models;
+using PetitionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Core.Models;
 
-namespace PetidionD.Infrastructure.Network.Packets.Chat;
+namespace PetitionD.Infrastructure.Network.Packets.Chat;
 
 public class ChattingCheckInPacket(
     ILogger<ChattingCheckInPacket> logger,

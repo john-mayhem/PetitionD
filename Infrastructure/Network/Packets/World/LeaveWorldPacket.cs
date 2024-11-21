@@ -1,7 +1,7 @@
 ﻿// File: Infrastructure/Network/Packets/World/LeaveWorldPacket.cs
 using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Packets.Base;
 
 namespace PetitionD.Infrastructure.Network.Packets.World;
 

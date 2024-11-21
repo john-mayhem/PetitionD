@@ -1,10 +1,10 @@
-﻿// File: Infrastructure/Network/Packets/World/CharListPacket.cs
+// File: Infrastructure/Network/Packets/World/CharListPacket.cs
 using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Core.Models;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Core.Models;
+using PetitionD.Infrastructure.Network.Packets.Base;
 
-namespace PetidionD.Infrastructure.Network.Packets.World;
+namespace PetitionD.Infrastructure.Network.Packets.World;
 
 public class CharListPacket(
     ILogger<CharListPacket> logger,

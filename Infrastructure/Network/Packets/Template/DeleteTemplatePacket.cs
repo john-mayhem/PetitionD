@@ -1,8 +1,9 @@
-﻿using NC.PetitionLib;
+using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Core.Models;
 
-namespace PetidionD.Infrastructure.Network.Packets.Template;
+namespace PetitionD.Infrastructure.Network.Packets.Template;
 
 public class DeleteTemplatePacket(ILogger<DeleteTemplatePacket> logger)
     : GmPacketBase(PacketType.G_DELETE_TEMPLATE)

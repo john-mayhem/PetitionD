@@ -1,10 +1,11 @@
-﻿// File: Infrastructure/Network/Packets/LoginPacket.cs
+// File: Infrastructure/Network/Packets/LoginPacket.cs
 using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Core.Interfaces;
+using PetitionD.Core.Models;
 
-namespace PetidionD.Infrastructure.Network.Packets.Auth
+namespace PetitionD.Infrastructure.Network.Packets.Auth
 {
     public class LoginPacket(IAuthService authService, ILogger<LoginPacket> logger) : GmPacketBase(PacketType.G_LOGIN)
     {

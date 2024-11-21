@@ -1,9 +1,10 @@
-﻿using NC.PetitionLib;
+using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Configuration;
+using PetitionD.Core.Models;
 
-namespace PetidionD.Infrastructure.Network.Packets.Petition;
+namespace PetitionD.Infrastructure.Network.Packets.Petition;
 
 public class UndoCheckOutPacket(
     ILogger<UndoCheckOutPacket> logger,
@@ -94,3 +95,4 @@ public class UndoCheckOutPacket(
     public override byte[] Serialize() =>
         new Packer((byte)PacketType.G_UNDO_CHECK_OUT).ToArray();
 }
+

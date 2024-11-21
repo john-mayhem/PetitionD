@@ -1,8 +1,8 @@
 ﻿// File: Services/PetitionService.cs
 using NC.PetitionLib;
-using PetidionD.Core.Interfaces;
-using PetidionD.Core.Models;
-using PetidionD.Infrastructure.Database.Repositories;
+using PetitionD.Core.Interfaces;
+using PetitionD.Core.Models;
+using PetitionD.Infrastructure.Database.Repositories;
 
 public class PetitionService : IPetitionService
 {

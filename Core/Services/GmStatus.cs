@@ -1,5 +1,5 @@
-﻿// File: Core/Services/GmStatus.cs
-namespace PetidionD.Core.Services;
+// File: Core/Services/GmStatus.cs
+namespace PetitionD.Core.Services;
 
 public static class GmStatus
 {

@@ -1,11 +1,11 @@
-﻿using NC.PetitionLib;
+using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Core.Models;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Core.Models;
+using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Configuration;
-using PetidionD.Core.Services; // Add this for AssignLogic
+using PetitionD.Core.Services; // Add this for AssignLogic
 
-namespace PetidionD.Infrastructure.Network.Packets.World;
+namespace PetitionD.Infrastructure.Network.Packets.World;
 
 public class CancelPetitionPacket(
     ILogger<CancelPetitionPacket> logger,

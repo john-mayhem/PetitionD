@@ -1,0 +1,8 @@
+D:\Dev\PetitionD\obj\Debug\net8.0-windows\PetitionD.csproj.AssemblyReference.cache
+D:\Dev\PetitionD\obj\Debug\net8.0-windows\PetitionD.UI.Forms.MainForm.resources
+D:\Dev\PetitionD\obj\Debug\net8.0-windows\PetitionD.csproj.GenerateResource.cache
+D:\Dev\PetitionD\obj\Debug\net8.0-windows\PetitionD.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\PetitionD\obj\Debug\net8.0-windows\PetitionD.AssemblyInfoInputs.cache
+D:\Dev\PetitionD\obj\Debug\net8.0-windows\PetitionD.AssemblyInfo.cs
+D:\Dev\PetitionD\obj\Debug\net8.0-windows\PetitionD.csproj.CoreCompileInputs.cache
+D:\Dev\PetitionD\obj\Debug\net8.0-windows\PetitionD.sourcelink.json

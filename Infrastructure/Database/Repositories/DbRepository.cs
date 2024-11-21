@@ -1,9 +1,9 @@
-﻿// File: Infrastructure/Database/DbRepository.cs
+// File: Infrastructure/Database/DbRepository.cs
 using Dapper;
 using NC.PetitionLib;
-using PetidionD.Core.Models;
+using PetitionD.Core.Models;
 
-namespace PetidionD.Infrastructure.Database.Repositories;
+namespace PetitionD.Infrastructure.Database.Repositories;
 
 public class DbRepository : IDbRepository
 {

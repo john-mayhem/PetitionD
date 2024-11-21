@@ -1,7 +1,8 @@
 ﻿// File: Infrastructure/Network/Packets/Chat/MessagingCheckInPacket.cs
 using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Core.Models;
+using PetitionD.Core.Models;
+using PetitionD.Core.Models;
 
 public class MessagingCheckInPacket(
     ILogger<MessagingCheckInPacket> logger,

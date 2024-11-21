@@ -1,0 +1,116 @@
+PetitionD/
+├─ Configuration/
+│  ├─ AppSettings.cs
+│  ├─ Config.cs
+│  ├─ ConfigLoader.cs
+│  ├─ ConfigurationExtensions.cs
+├─ Core/
+│  ├─ Enums/
+│  │  ├─ GmGrade.cs
+│  │  ├─ PetitionState.cs
+│  ├─ Extensions/
+│  │  ├─ CharacterExtensions.cs
+│  ├─ Interfaces/
+│  │  ├─ IAuthService.cs
+│  │  ├─ IPetitionService.cs
+│  │  ├─ IRepositoryBase.cs
+│  ├─ Models/
+│  │  ├─ Category.cs
+│  │  ├─ GameCharacter.cs
+│  │  ├─ GmCharacter.cs
+│  │  ├─ Lineage2Info.cs
+│  │  ├─ Petition.cs
+│  │  ├─ PetitionHistory.cs
+│  │  ├─ PetitionList.cs
+│  │  ├─ PetitionMemo.cs
+│  │  ├─ Template.cs
+│  ├─ Services/
+│  │  ├─ AssignLogic.cs
+│  │  ├─ GmStatus.cs
+│  │  ├─ GmStatusService.cs
+│  │  ├─ Quota.cs
+│  │  ├─ QuotaService.cs
+│  │  ├─ TemplateService.cs
+├─ GlobalUsings.cs
+├─ Infrastructure/
+│  ├─ Database/
+│  │  ├─ DatabaseException.cs
+│  │  ├─ DatabaseModule.cs
+│  │  ├─ DbConnectionPool.cs
+│  │  ├─ DbContext.cs
+│  │  ├─ IDbRepository.cs
+│  │  ├─ Repositories/
+│  │  │  ├─ DbRepository.cs
+│  │  │  ├─ GmRepository.cs
+│  │  │  ├─ PetitionRepository.cs
+│  │  │  ├─ TemplateRepository.cs
+│  │  ├─ SqlConnectionFactory.cs
+│  │  ├─ StoredProcedures/
+│  ├─ Network/
+│  │  ├─ GmService.cs
+│  │  ├─ INetworkBase.cs
+│  │  ├─ INetworkService.cs
+│  │  ├─ ISessionManager.cs
+│  │  ├─ Logging/
+│  │  │  ├─ LoggingManager.cs
+│  │  ├─ NetworkBase.cs
+│  │  ├─ NetworkService.cs
+│  │  ├─ NoticeService.cs
+│  │  ├─ Packets/
+│  │  │  ├─ Auth/
+│  │  │  │  ├─ LoginPacket.cs
+│  │  │  ├─ Base/
+│  │  │  │  ├─ GmPacketBase.cs
+│  │  │  │  ├─ WorldPacketBase.cs
+│  │  │  ├─ Chat/
+│  │  │  │  ├─ ChattingCheckInPacket.cs
+│  │  │  │  ├─ MessagingCheckInPacket.cs
+│  │  │  ├─ GmPacketFactory.cs
+│  │  │  ├─ PacketHandler.cs
+│  │  │  ├─ Petition/
+│  │  │  │  ├─ AddMemoPacket.cs
+│  │  │  │  ├─ CheckOutPetitionPacket.cs
+│  │  │  │  ├─ ForwardingPacket.cs
+│  │  │  │  ├─ ModifyCategoryPacket.cs
+│  │  │  │  ├─ RequestCategoryPacket.cs
+│  │  │  │  ├─ UndoCheckOutPacket.cs
+│  │  │  ├─ Template/
+│  │  │  │  ├─ DeleteTemplatePacket.cs
+│  │  │  │  ├─ DownloadTemplatePacket.cs
+│  │  │  │  ├─ RequestTemplatePacket.cs
+│  │  │  │  ├─ UpdateTemplateOrderPacket.cs
+│  │  │  │  ├─ UpdateTemplatePacket.cs
+│  │  │  ├─ World/
+│  │  │  │  ├─ CancelPetitionPacket.cs
+│  │  │  │  ├─ CharListPacket.cs
+│  │  │  │  ├─ ConnectedCharsPacket.cs
+│  │  │  │  ├─ ConnectWorldPacket.cs
+│  │  │  │  ├─ EnterWorldPacket.cs
+│  │  │  │  ├─ LeaveWorldPacket.cs
+│  │  │  │  ├─ RequestWorldCharPacket.cs
+│  │  │  │  ├─ RequestWorldListPacket.cs
+│  │  │  │  ├─ SubmitPetitionPacket.cs
+│  │  ├─ SessionManager.cs
+│  │  ├─ Sessions/
+│  │  │  ├─ BaseSession.cs
+│  │  │  ├─ GmSession.cs
+│  │  │  ├─ ISession.cs
+│  │  │  ├─ NoticeSession.cs
+│  │  │  ├─ WorldSession.cs
+│  │  ├─ WorldService.cs
+│  │  ├─ WorldSessionManager.cs
+├─ lib/
+├─ Program.cs
+├─ Services/
+│  ├─ AssignmentService.cs
+│  ├─ AuthService.cs
+│  ├─ PetitionService.cs
+├─ UI/
+│  ├─ ConsoleUI/
+│  │  ├─ ConsoleOutputManager.cs
+│  │  ├─ FigletBuilder.cs
+│  ├─ Forms/
+│  │  ├─ ConfigForm.cs
+│  │  ├─ MainForm.cs
+│  │  ├─ MainForm.Designer.cs
+

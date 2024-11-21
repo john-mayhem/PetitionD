@@ -1,13 +1,14 @@
-﻿using NC.PetitionLib;
+using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Packets.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PetitionD.Core.Models;
 
-namespace PetidionD.Infrastructure.Network.Packets.Template
+namespace PetitionD.Infrastructure.Network.Packets.Template
 {
     public class DownloadTemplatePacket(
         ILogger<DownloadTemplatePacket> logger)
@@ -49,3 +50,4 @@ namespace PetidionD.Infrastructure.Network.Packets.Template
             new Packer((byte)PacketType.G_DOWNLOAD_TEMPLATE).ToArray();
     }
 }
+

@@ -1,10 +1,11 @@
-﻿
+
 // File: Infrastructure/Network/Packets/RequestCategoryPacket.cs
 using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Core.Models;
 
-namespace PetidionD.Infrastructure.Network.Packets.Petition;
+namespace PetitionD.Infrastructure.Network.Packets.Petition;
 
 public class RequestCategoryPacket(ILogger<RequestCategoryPacket> logger) : GmPacketBase(PacketType.G_REQUEST_CATEGORY)
 {

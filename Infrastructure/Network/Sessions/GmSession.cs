@@ -6,7 +6,7 @@ using PetitionD.Core.Interfaces;
 using System.Security.Cryptography;
 using PetitionD.Infrastructure.Network.Packets;
 using NC.ToolNet.Net;
-using PetidionD.Core.Models;
+using PetitionD.Core.Models;
 
 namespace PetitionD.Infrastructure.Network.Sessions;
 

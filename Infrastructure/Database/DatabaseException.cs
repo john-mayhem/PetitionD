@@ -1,5 +1,5 @@
-﻿// File: Infrastructure/Database/DatabaseException.cs
-namespace PetidionD.Infrastructure.Database;
+// File: Infrastructure/Database/DatabaseException.cs
+namespace PetitionD.Infrastructure.Database;
 
 public class DatabaseException : Exception
 {

@@ -1,10 +1,10 @@
-﻿// File: Infrastructure/Network/Packets/Petition/ModifyCategoryPacket.cs
+// File: Infrastructure/Network/Packets/Petition/ModifyCategoryPacket.cs
 using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Core.Models;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Core.Models;
+using PetitionD.Infrastructure.Network.Packets.Base;
 
-namespace PetidionD.Infrastructure.Network.Packets.Petition;
+namespace PetitionD.Infrastructure.Network.Packets.Petition;
 
 public class ModifyCategoryPacket(
     ILogger<ModifyCategoryPacket> logger,

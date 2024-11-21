@@ -1,9 +1,10 @@
-﻿// File: Infrastructure/Network/Packets/World/ConnectedCharsPacket.cs
+// File: Infrastructure/Network/Packets/World/ConnectedCharsPacket.cs
 using NC.PetitionLib;
 using NC.ToolNet.Net;
-using PetidionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Core.Models;
 
-namespace PetidionD.Infrastructure.Network.Packets.World;
+namespace PetitionD.Infrastructure.Network.Packets.World;
 
 public class ConnectedCharsPacket(
     ILogger<ConnectedCharsPacket> logger) : WorldPacketBase(PacketType.W_CONNECTED_CHARS2)

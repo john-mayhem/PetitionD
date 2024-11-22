@@ -33,11 +33,6 @@ public class GmPacketFactory
         RegisterPacket<RequestWorldCharPacket>(PacketType.G_REQUEST_WORLD_CHAR);
         RegisterPacket<EnterWorldPacket>(PacketType.G_ENTER_WORLD);
         RegisterPacket<LeaveWorldPacket>(PacketType.G_LEAVE_WORLD);
-        RegisterPacket<ConnectWorldPacket>(PacketType.W_CONNECT_WORLD2);
-        RegisterPacket<CharListPacket>(PacketType.W_CHAR_LIST2);
-        RegisterPacket<ConnectedCharsPacket>(PacketType.W_CONNECTED_CHARS2);
-        RegisterPacket<SubmitPetitionPacket>(PacketType.W_SUBMIT_PETITION6);
-        RegisterPacket<CancelPetitionPacket>(PacketType.W_CANCEL_PETITION3);
 
         // Petition
         RegisterPacket<RequestCategoryPacket>(PacketType.G_REQUEST_CATEGORY);

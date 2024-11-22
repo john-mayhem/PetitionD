@@ -11,17 +11,19 @@ public class AuthService(ILogger<AuthService> logger, IDbRepository repository) 
 {
     private readonly Dictionary<int, string> _activeSessions = [];
 
-    public async Task<(PetitionErrorCode ErrorCode, int AccountUid)> AuthenticateAsync(string account, string password)
+    public async Task<(PetitionErrorCode ErrorCode, int AccountUid)> AuthenticateAsync(
+        string account, string password)
     {
         try
         {
-            var (IsValid, AccountUid, _) = await repository.ValidateGmCredentialsAsync(account, password);
+            var (IsValid, AccountUid, _) = await repository.ValidateGmCredentialsAsync(
+                account, password);
 
             if (IsValid)
             {
                 var sessionToken = GenerateSessionToken();
                 _activeSessions[AccountUid] = sessionToken;
-                return (PetitionErrorCode.Success, AccountUdid);
+                return (PetitionErrorCode.Success, AccountUid);
             }
 
             return (PetitionErrorCode.IncorrectPassword, 0);

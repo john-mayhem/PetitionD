@@ -26,10 +26,10 @@ public class Template
 
     public static class Operations
     {
-        public static int Delete(int accountUid, int code)
+        public static PetitionErrorCode Delete(int accountUid, int code)
         {
             // Implementation
-            return code;
+            return PetitionErrorCode.Success;
         }
 
         public static PetitionErrorCode Download(
@@ -39,7 +39,6 @@ public class Template
             out int resultCode)
         {
             resultCode = code;
-            // Implementation
             return PetitionErrorCode.Success;
         }
 
@@ -48,13 +47,12 @@ public class Template
             string gmAccount,
             int code,
             string name,
-            Type type,
+            TemplateType type,
             string content,
             int category,
             out int resultCode)
         {
             resultCode = code;
-            // Implementation
             return PetitionErrorCode.Success;
         }
 
@@ -63,7 +61,6 @@ public class Template
             int code,
             int offset)
         {
-            // Implementation
             return PetitionErrorCode.Success;
         }
     }

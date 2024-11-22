@@ -16,7 +16,7 @@ public class NoticeService(
     private readonly WorldSessionManager _worldSessionManager = worldSessionManager;
     private readonly ILoggerFactory _loggerFactory = loggerFactory;
     private readonly AppSettings _settings = settings;
-    private readonly HashSet<string> _allowedIps = new(settings.NoticeServiceAllowIpList.Split(','));
+    private readonly HashSet<string> _allowedIps = new HashSet<string>(settings.NoticeServiceAllowIpList);
 
     protected override void OnSocketAccepted(ListenerSocket listener, Socket socket)
     {

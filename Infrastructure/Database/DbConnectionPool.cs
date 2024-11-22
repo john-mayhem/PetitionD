@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using Microsoft.Data.SqlClient;
+using System.Collections.Concurrent;
 using System.Data;
 
 namespace PetitionD.Infrastructure.Database;
@@ -95,5 +96,31 @@ public class DbConnectionPool(
             await asyncDisposable.DisposeAsync();
         else
             connection.Dispose();
+    }
+
+    public async Task<T> ExecuteReaderAsync<T>(
+    string storedProcName,
+    object parameters,
+    Func<SqlDataReader, CancellationToken, Task<T>> mapper,
+    CancellationToken cancellationToken = default)
+    {
+        var connection = await GetConnectionAsync(cancellationToken);
+        using var command = new SqlCommand(storedProcName, (SqlConnection)connection)
+        {
+            CommandType = CommandType.StoredProcedure
+        };
+
+        AddParameters(command, parameters);
+        using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        return await mapper(reader, cancellationToken);
+    }
+
+    private static void AddParameters(SqlCommand command, object parameters)
+    {
+        foreach (var prop in parameters.GetType().GetProperties())
+        {
+            var value = prop.GetValue(parameters);
+            command.Parameters.AddWithValue($"@{prop.Name}", value ?? DBNull.Value);
+        }
     }
 }

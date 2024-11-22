@@ -244,17 +244,16 @@ public class PetitionService(
     }
 
     private PetitionErrorCode ValidatePetition(
-    byte category, 
-    GameCharacter user, 
-    string content)
-{
-    if (string.IsNullOrEmpty(content))
-        return PetitionErrorCode.InvalidContent;
-        
-    if (!Category.IsValid(category))
-        return PetitionErrorCode.UnexpectedCategory;
-        
-    // Add more validation
-    return PetitionErrorCode.Success;
-}
+        byte category,
+        GameCharacter user,
+        string content)
+    {
+        if (string.IsNullOrEmpty(content))
+            return PetitionErrorCode.UnexpectedPetitionId;  // Using an existing error code
+
+        if (!Category.IsValid(category))
+            return PetitionErrorCode.UnexpectedCategory;
+
+        return PetitionErrorCode.Success;
+    }
 }

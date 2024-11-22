@@ -70,15 +70,15 @@ public class PetitionRepository(
         {
             var parameters = new { PetitionId = petitionId };
 
-            var petition = await _dbContext.ExecuteStoredProcAsync(
+            return await _dbContext.ExecuteStoredProcAsync<Petition?>( // Added generic type
                 "up_Server_GetPetition",
                 parameters,
-                async reader =>
+                async (reader, token) =>
                 {
-                    if (!await reader.ReadAsync(cancellationToken))
+                    if (!await reader.ReadAsync(token))
                         return null;
 
-                    var p = new Petition
+                    return new Petition
                     {
                         PetitionId = petitionId,
                         PetitionSeq = reader.GetString(0),
@@ -91,24 +91,8 @@ public class PetitionRepository(
                         SubmitTime = reader.GetDateTime(7),
                         QuotaAtSubmit = reader.GetInt32(8)
                     };
-
-                    // Load sub-objects
-                    p.User = await LoadGameCharacterAsync(p.PetitionSeq, "User", cancellationToken);
-                    p.ForcedGm = await LoadGameCharacterAsync(p.PetitionSeq, "ForcedGm", cancellationToken);
-                    p.AssignedGm = await LoadGameCharacterAsync(p.PetitionSeq, "AssignedGm", cancellationToken);
-                    p.CheckOutGm = await LoadGameCharacterAsync(p.PetitionSeq, "CheckOutGm", cancellationToken);
-
-                    // Load history
-                    p.History = await LoadPetitionHistoryAsync(p.PetitionSeq, cancellationToken);
-
-                    // Load memos
-                    p.Memos = await LoadPetitionMemosAsync(p.PetitionSeq, cancellationToken);
-
-                    return p;
                 },
                 cancellationToken);
-
-            return petition;
         }
         catch (Exception ex)
         {
@@ -128,10 +112,10 @@ public class PetitionRepository(
             CharacterType = characterType
         };
 
-        return await _dbContext.ExecuteStoredProcAsync(
+        return await _dbContext.ExecuteStoredProcAsync<GameCharacter>( // Added generic type
             "up_Server_GetPetitionCharacter",
             parameters,
-            async reader =>
+            async (reader, token) =>
             {
                 if (!await reader.ReadAsync(cancellationToken))
                     return new GameCharacter();
@@ -172,15 +156,15 @@ public class PetitionRepository(
     }
 
     private async Task<List<PetitionHistory>> LoadPetitionHistoryAsync(
-            string petitionSeq,
-            CancellationToken cancellationToken)
+        string petitionSeq,
+        CancellationToken cancellationToken)
     {
         var parameters = new { Seq = petitionSeq };
 
-        return await _dbContext.ExecuteStoredProcAsync(
+        return await _dbContext.ExecuteStoredProcAsync<List<PetitionHistory>>( // Added generic type
             "up_Server_GetHistoryList",
             parameters,
-            async reader =>
+            async (reader, token) =>
             {
                 var history = new List<PetitionHistory>();
                 while (await reader.ReadAsync(cancellationToken))
@@ -203,10 +187,10 @@ public class PetitionRepository(
     {
         var parameters = new { Seq = petitionSeq };
 
-        return await _dbContext.ExecuteStoredProcAsync(
+        return await _dbContext.ExecuteStoredProcAsync<List<PetitionMemo>>(
             "up_Server_GetMemoList",
             parameters,
-            async reader =>
+            async (reader, token) =>
             {
                 var memos = new List<PetitionMemo>();
                 while (await reader.ReadAsync(cancellationToken))
@@ -312,19 +296,20 @@ public class PetitionRepository(
         try
         {
             var parameters = new { WorldId = (byte)worldId };
-
             var petitions = new List<Petition>();
-            await _dbContext.ExecuteStoredProcAsync(
+
+            await _dbContext.ExecuteStoredProcAsync<object>( // Added generic type
                 "up_Server_GetActivePetitionList",
                 parameters,
-                async reader =>
+                async (reader, token) =>
                 {
-                    while (await reader.ReadAsync(cancellationToken))
+                    while (await reader.ReadAsync(token))
                     {
                         var petition = new Petition();
-                        await LoadPetitionFromReaderAsync(petition, reader, cancellationToken);
+                        await LoadPetitionFromReaderAsync(petition, reader, token);
                         petitions.Add(petition);
                     }
+                    return Task.CompletedTask;
                 },
                 cancellationToken);
 
@@ -333,7 +318,7 @@ public class PetitionRepository(
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to get active petitions for world {WorldId}", worldId);
-            return [];
+            return new List<Petition>();
         }
     }
 
@@ -370,19 +355,55 @@ public class PetitionRepository(
     }
 
 
-    public async Task<int> GetCurrentQuotaAsync(int accountUid, CancellationToken cancellationToken)
+    public async Task<int> GetCurrentQuotaAsync(
+        int accountUid,
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException("Login packet is incoming only");
+        var parameters = new { AccountUid = accountUid };
+
+        return await _dbContext.ExecuteStoredProcAsync<int>(
+            "up_Server_GetCurrentQuota",
+            parameters,
+            async (reader, token) =>
+            {
+                if (await reader.ReadAsync(token))
+                {
+                    return reader.GetInt32(0);
+                }
+                return 0;
+            },
+            cancellationToken);
     }
 
-    public async Task ResetQuotaAsync(int accountUid, CancellationToken cancellationToken)
+    public async Task ResetQuotaAsync(
+        int accountUid,
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException("Login packet is incoming only");
+        var parameters = new { AccountUid = accountUid };
+
+        await _dbContext.ExecuteStoredProcAsync<object>(
+            "up_Server_ResetQuota",
+            parameters,
+            async (reader, token) =>
+            {
+                await reader.ReadAsync(token);
+                return null;
+            },
+            cancellationToken);
     }
 
-    public async Task ResetAllQuotasAsync(CancellationToken cancellationToken)
+    public async Task ResetAllQuotasAsync(
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException("Login packet is incoming only");
+        await _dbContext.ExecuteStoredProcAsync<object>(
+            "up_Server_ResetAllQuotas",
+            new { },
+            async (reader, token) =>
+            {
+                await reader.ReadAsync(token);
+                return null;
+            },
+            cancellationToken);
     }
 
     public async Task<PetitionErrorCode> UpdateQuotaAsync(

@@ -19,13 +19,13 @@ public class TemplateRepository(
         {
             var parameters = new { GmAccountUid = gmAccountUid };
 
-            return await _dbContext.ExecuteStoredProcAsync(
+            return await _dbContext.ExecuteStoredProcAsync<List<Template>>( // Specify List<Template>
                 "up_Server_GetTemplateList",
                 parameters,
-                async reader =>
+                async (reader, token) =>
                 {
                     var templates = new List<Template>();
-                    while (await reader.ReadAsync(cancellationToken))
+                    while (await reader.ReadAsync(token))
                     {
                         templates.Add(new Template
                         {
@@ -44,7 +44,7 @@ public class TemplateRepository(
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to get templates for GM {GmAccountUid}", gmAccountUid);
-            return [];
+            return new List<Template>();
         }
     }
 
@@ -56,8 +56,6 @@ public class TemplateRepository(
     {
         try
         {
-            using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
             var parameters = new
             {
                 GmAccountUid = gmAccountUid,
@@ -66,26 +64,25 @@ public class TemplateRepository(
                 template.Name,
                 Type = (byte)template.Type,
                 template.Content,
-                template.Category,
+                Category = (byte)template.Category,
                 template.SortOrder
             };
 
-            var result = await _dbContext.ExecuteStoredProcAsync(
+            var result = await _dbContext.ExecuteStoredProcAsync<int>( // Specify int
                 "up_Server_UpdateTemplate",
                 parameters,
-                async reader =>
+                async (reader, token) =>
                 {
-                    await reader.ReadAsync(cancellationToken);
+                    await reader.ReadAsync(token);
                     return reader.GetInt32(0);
                 },
                 cancellationToken);
 
-            scope.Complete();
             return (PetitionErrorCode.Success, result);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to update template {TemplateCode}", template.Code);
+            _logger.LogError(ex, "Failed to update template {Code}", template.Code);
             return (PetitionErrorCode.DatabaseFail, 0);
         }
     }

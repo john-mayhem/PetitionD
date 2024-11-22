@@ -6,23 +6,36 @@ using PetitionD.Core.Models;
 
 namespace PetitionD.Infrastructure.Network.Packets.World;
 
-public class ConnectWorldPacket(
-    ILogger<ConnectWorldPacket> logger,
-    WorldSessionManager worldSessionManager,
-    PetitionList petitionList) : WorldPacketBase(PacketType.W_CONNECT_WORLD2)
+public class ConnectWorldPacket : WorldPacketHandler
 {
-    public override void Handle(WorldSession worldSession, Unpacker unpacker)
+    private readonly WorldSessionManager _worldSessionManager;
+    private readonly PetitionList _petitionList;
+
+    public ConnectWorldPacket(
+        ILogger<ConnectWorldPacket> logger,
+        WorldSessionManager worldSessionManager,
+        PetitionList petitionList)
+        : base(PacketType.W_CONNECT_WORLD2, logger)
     {
+        _worldSessionManager = worldSessionManager;
+        _petitionList = petitionList;
+    }
+
+    public override void Handle(ISession session, Unpacker unpacker)
+    {
+        if (session is not WorldSession worldSession)
+            return;
+
         try
         {
-            unpacker.GetInt32(); // buildNumber
+            var buildNumber = unpacker.GetInt32();
             var serviceBuildNumber = unpacker.GetUInt8();
             var worldId = unpacker.GetUInt8();
             var worldName = unpacker.GetShortStringMax(MaxLen.WorldName);
             var maxPlayer = unpacker.GetUInt8();
             var oneTimeKeyResponse = unpacker.GetBytes(16);
 
-            if (worldSessionManager.GetSession(worldId) != null)
+            if (_worldSessionManager.GetSession(worldId) != null)
             {
                 SendResponse(worldSession, PetitionErrorCode.WorldAlreadyConnected);
                 worldSession.Stop();
@@ -34,24 +47,15 @@ public class ConnectWorldPacket(
             worldSession.State = WorldSessionState.Connected;
             worldSession.LastOnlineCheckTime = DateTime.Now;
 
-            var result = worldSessionManager.AddSession(worldSession);
-
-            if (result != PetitionErrorCode.Success)
-            {
-                SendResponse(worldSession, result);
-                return;
-            }
-
-            // Load existing petitions for this world
-            var activePetitions = petitionList.GetActivePetitionCount(worldId);
-            logger.LogInformation("{Count} petitions loaded for world {WorldId}",
-                activePetitions, worldId);
+            _worldSessionManager.AddSession(worldSession);
 
             SendResponse(worldSession, PetitionErrorCode.Success);
+
+            Logger.LogInformation("World {WorldId} ({WorldName}) connected", worldId, worldName);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error handling world connection");
+            Logger.LogError(ex, "Error handling world connection");
             worldSession.Stop();
         }
     }

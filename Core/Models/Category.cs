@@ -1,11 +1,14 @@
 // File: Core/Models/Category.cs
 namespace PetitionD.Core.Models;
 
-public class Category
+public static class Category
 {
-    private static readonly Dictionary<int, string> Categories = [];
+    private static readonly Dictionary<int, string> Categories = new();
 
-    public static bool IsValid(int categoryId) => Categories.ContainsKey(categoryId);
+    public static bool IsValid(int categoryId)
+    {
+        return Categories.ContainsKey(categoryId);
+    }
 
     public static void AddCategory(int id, string name)
     {

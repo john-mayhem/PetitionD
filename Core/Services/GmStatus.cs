@@ -3,7 +3,7 @@ namespace PetitionD.Core.Services;
 
 public static class GmStatus
 {
-    private static readonly Dictionary<int, HashSet<string>> _worldGms = [];
+    private static readonly Dictionary<int, HashSet<string>> _worldGms = new();
     private static readonly object _lock = new();
 
     public static void Add(int worldId, string gmCharName)
@@ -12,7 +12,7 @@ public static class GmStatus
         {
             if (!_worldGms.TryGetValue(worldId, out var gms))
             {
-                gms = [];
+                gms = new HashSet<string>();
                 _worldGms[worldId] = gms;
             }
             gms.Add(gmCharName);

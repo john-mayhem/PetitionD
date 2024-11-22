@@ -26,12 +26,12 @@ public class GmRepository(
                 Password = password
             };
 
-            return await _dbContext.ExecuteStoredProcAsync(
+            return await _dbContext.ExecuteStoredProcAsync<(bool, int, Grade)>( // Specify tuple
                 "up_Server_ValidateGM",
                 parameters,
-                async reader =>
+                async (reader, token) =>
                 {
-                    if (!await reader.ReadAsync(cancellationToken))
+                    if (!await reader.ReadAsync(token))
                         return (false, 0, Grade.User);
 
                     return (
@@ -48,7 +48,6 @@ public class GmRepository(
             return (false, 0, Grade.User);
         }
     }
-
     public async Task UpdateGmStatusAsync(
         int worldId,
         string gmCharName,

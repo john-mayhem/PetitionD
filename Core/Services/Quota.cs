@@ -3,7 +3,7 @@ namespace PetitionD.Core.Services;
 
 public static class Quota
 {
-    private static readonly Dictionary<int, int> _quotas = [];
+    private static readonly Dictionary<int, int> _quotas = new();
     private static readonly object _lock = new();
 
     public static int GetCurrentQuota(int accountUid)

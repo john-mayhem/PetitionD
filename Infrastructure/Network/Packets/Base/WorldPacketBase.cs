@@ -5,10 +5,9 @@ using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Sessions;
 
-public abstract class WorldPacketBase(PacketType packetType)
-{
-    public PacketType PacketType { get; } = packetType;
 
+public abstract class WorldPacketBase : PacketBase
+{
+    protected WorldPacketBase(PacketType packetType) : base(packetType) { }
     public abstract void Handle(WorldSession session, Unpacker unpacker);
-    public abstract byte[] Serialize();
 }

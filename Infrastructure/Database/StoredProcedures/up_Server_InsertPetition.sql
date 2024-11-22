@@ -1,5 +1,5 @@
 CREATE PROCEDURE [dbo].[up_Server_InsertPetition]
-    @Seq NVARCHAR(14),
+    @PetitionSeq NVARCHAR(14),
     @Category TINYINT,
     @WorldId TINYINT,
     @AccountName NVARCHAR(14),
@@ -16,38 +16,51 @@ CREATE PROCEDURE [dbo].[up_Server_InsertPetition]
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+    
     BEGIN TRY
         BEGIN TRANSACTION;
-
+        
         INSERT INTO Petition (
-            PetitionSeq, Category, WorldId, 
+            PetitionSeq, Category, WorldId,
             AccountName, AccountUid, CharName, CharUid,
-            Content, State, SubmitTime, QuotaAtSubmit,
+            Content, 
             ForcedGmAccountName, ForcedGmAccountUid, 
-            ForcedGmCharName, ForcedGmCharUid
+            ForcedGmCharName, ForcedGmCharUid,
+            QuotaAtSubmit, SubmitTime,
+            State, Grade, Flag
         )
         VALUES (
-            @Seq, @Category, @WorldId,
+            @PetitionSeq, @Category, @WorldId,
             @AccountName, @AccountUid, @CharName, @CharUid,
-            @Content, 2, @Time, @QuotaAtSubmit,
+            @Content,
             @ForcedGmAccountName, @ForcedGmAccountUid,
-            @ForcedGmCharName, @ForcedGmCharUid
+            @ForcedGmCharName, @ForcedGmCharUid,
+            @QuotaAtSubmit, @Time,
+            2, -- Submit state
+            1, -- Default grade
+            0  -- Default flag
         );
-
+        
         -- Add initial history entry
         INSERT INTO PetitionHistory (
-            PetitionSeq, HistorySeq, Actor, ActionCode, ActionTime
+            PetitionSeq, HistorySeq, Actor, 
+            ActionCode, ActionTime
         )
         VALUES (
-            @Seq, 1, @CharName, 2, @Time
+            @PetitionSeq, 1, @CharName,
+            2, -- Submit state
+            @Time
         );
-
+        
         COMMIT TRANSACTION;
+        RETURN 0;
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
-        THROW;
+            
+        RETURN -1;
     END CATCH
 END
 GO

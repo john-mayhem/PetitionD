@@ -4,6 +4,7 @@ using PetitionD.Core.Extensions;
 using PetitionD.Core.Models;
 using PetitionD.Configuration;
 using PetitionD.Core.Enums;
+using PetitionD.Infrastructure.Network.Extensions;
 
 namespace PetitionD.Core.Services;
 

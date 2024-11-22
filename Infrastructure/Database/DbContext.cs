@@ -2,20 +2,38 @@
 namespace PetitionD.Infrastructure.Database;
 
 using Microsoft.Data.SqlClient;
+using PetitionD.Infrastructure.Resilience;
 using System.Data;
 
 public class DbContext : IAsyncDisposable
 {
     private readonly DbConnectionPool _connectionPool;
     private readonly ILogger<DbContext> _logger;
+    private readonly ResiliencePolicy _resiliencePolicy;
     private IDbConnection? _currentConnection;
 
     public DbContext(
         DbConnectionPool connectionPool,
-        ILogger<DbContext> logger)
+        ILogger<DbContext> logger,
+        ResiliencePolicy resiliencePolicy)
     {
         _connectionPool = connectionPool;
         _logger = logger;
+        _resiliencePolicy = resiliencePolicy;
+    }
+
+    public async Task<T> ExecuteWithResilienceAsync<T>(
+        Func<IDbConnection, CancellationToken, Task<T>> operation,
+        CancellationToken cancellationToken = default)
+    {
+        return await _resiliencePolicy.ExecuteAsync(
+            async token =>
+            {
+                var connection = await GetConnectionAsync(token);
+                return await operation(connection, token);
+            },
+            ResiliencePolicy.ShouldRetryDatabaseOperation,
+            cancellationToken);
     }
 
     private async Task<IDbConnection> GetConnectionAsync(

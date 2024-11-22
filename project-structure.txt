@@ -46,8 +46,38 @@ PetitionD/
 │  │  │  ├─ TemplateRepository.cs
 │  │  ├─ SqlConnectionFactory.cs
 │  │  ├─ StoredProcedures/
+│  │  │  ├─ Maintenance/
+│  │  │  │  ├─ up_Server_CleanupOldPetitions.sql
+│  │  │  │  ├─ up_Server_GetPetitionStats.sql
+│  │  │  ├─ up_Server_AddChatLog.sql
+│  │  │  ├─ up_Server_AddL2Info.sql
+│  │  │  ├─ up_Server_AddMemo.sql
+│  │  │  ├─ up_Server_CleanupOldPetitions.sql
+│  │  │  ├─ up_Server_GetActivePetitionList.sql
+│  │  │  ├─ up_Server_GetCurrentQuota.sql
+│  │  │  ├─ up_Server_GetGmStatus.sql
+│  │  │  ├─ up_Server_GetHistoryList.sql
+│  │  │  ├─ up_Server_GetL2Info.sql
+│  │  │  ├─ up_Server_GetMemoList.sql
+│  │  │  ├─ up_Server_GetPastPetitionList.sql
+│  │  │  ├─ up_Server_GetPetition.sql
+│  │  │  ├─ up_Server_GetPetitionStats.sql
+│  │  │  ├─ up_Server_GetTemplateList.sql
+│  │  │  ├─ up_Server_InsertPetition.sql
+│  │  │  ├─ up_Server_ResetQuota.sql
+│  │  │  ├─ up_Server_UpdateGmStatus.sql
+│  │  │  ├─ up_Server_UpdatePetitionState.sql
+│  │  │  ├─ up_Server_UpdateQuota.sql
+│  │  │  ├─ up_Server_UpdateTemplate.sql
+│  │  │  ├─ up_Server_ValidateGM.sql
+│  │  ├─ Tables/
+│  │  │  ├─ Indexes.sql
+│  │  │  ├─ Tables.sql
 │  ├─ Network/
+│  │  ├─ Extensions/
+│  │  │  ├─ WorldSessionExtensions.cs
 │  │  ├─ GmService.cs
+│  │  ├─ IGmSession.cs
 │  │  ├─ INetworkBase.cs
 │  │  ├─ INetworkService.cs
 │  │  ├─ ISessionManager.cs
@@ -67,7 +97,7 @@ PetitionD/
 │  │  │  │  ├─ MessagingCheckInPacket.cs
 │  │  │  ├─ GmPacketFactory.cs
 │  │  │  ├─ PacketHandler.cs
-│  │  │  ├─ Petition/
+│  │  │  ├─ PetitionHandlers/
 │  │  │  │  ├─ AddMemoPacket.cs
 │  │  │  │  ├─ CheckOutPetitionPacket.cs
 │  │  │  │  ├─ ForwardingPacket.cs
@@ -99,6 +129,10 @@ PetitionD/
 │  │  │  ├─ WorldSession.cs
 │  │  ├─ WorldService.cs
 │  │  ├─ WorldSessionManager.cs
+│  ├─ Resilience/
+│  │  ├─ CircuitBreaker.cs
+│  │  ├─ ResiliencePolicy.cs
+│  │  ├─ RetryPolicy.cs
 ├─ lib/
 ├─ Program.cs
 ├─ Services/

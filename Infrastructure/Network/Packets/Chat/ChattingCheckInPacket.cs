@@ -3,7 +3,6 @@ using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Core.Models;
 using PetitionD.Infrastructure.Network.Packets.Base;
-using PetitionD.Core.Models;
 
 namespace PetitionD.Infrastructure.Network.Packets.Chat;
 
@@ -27,7 +26,7 @@ public class ChattingCheckInPacket(
                 return;
             }
 
-            var gmCharacter = session.GetCharacter(petition.mWorldId);
+            var gmCharacter = session.GetCharacter(petition.WorldId);
             var result = petition.ChattingCheckIn(gmCharacter, flag);
 
             SendResponse(session, petitionId, result);
@@ -55,7 +54,7 @@ public class ChattingCheckInPacket(
     private static void NotifyOtherGms(GmSession session, Petition petition)
     {
         var notification = new Packer((byte)PacketType.G_NOTIFY_FINISH);
-        notification.AddInt32(petition.mPetitionId);
+        notification.AddInt32(petition.PetitionId);
         session.Send(notification.ToArray());
     }
 

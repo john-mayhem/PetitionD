@@ -4,7 +4,7 @@ using NC.ToolNet.Net;
 using PetitionD.Core.Models;
 using PetitionD.Infrastructure.Network.Packets.Base;
 
-namespace PetitionD.Infrastructure.Network.Packets.Petition;
+namespace PetitionD.Infrastructure.Network.Packets.PetitionHandlers;
 
 public class ModifyCategoryPacket(
     ILogger<ModifyCategoryPacket> logger,
@@ -25,14 +25,14 @@ public class ModifyCategoryPacket(
                 return;
             }
 
-            var worldSession = worldSessionManager.GetSession(petition.mWorldId);
+            var worldSession = worldSessionManager.GetSession(petition.WorldId);
             if (worldSession == null)
             {
                 SendResponse(session, petitionId, PetitionErrorCode.WorldDown);
                 return;
             }
 
-            var gmCharacter = session.GetCharacter(petition.mWorldId);
+            var gmCharacter = session.GetCharacter(petition.WorldId);
             var result = petition.ModifyCategory(gmCharacter, categoryId);
 
             SendResponse(session, petitionId, result);

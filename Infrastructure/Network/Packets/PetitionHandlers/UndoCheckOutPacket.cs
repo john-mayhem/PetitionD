@@ -5,7 +5,7 @@ using PetitionD.Configuration;
 using PetitionD.Core.Models;
 using PetitionD.Core.Services;
 
-namespace PetitionD.Infrastructure.Network.Packets.Petition;
+namespace PetitionD.Infrastructure.Network.Packets.PetitionHandlers;
 
 public class UndoCheckOutPacket(
     ILogger<UndoCheckOutPacket> logger,
@@ -29,14 +29,14 @@ public class UndoCheckOutPacket(
                 return;
             }
 
-            var worldSession = _worldSessionManager.GetSession(petition.mWorldId);
+            var worldSession = _worldSessionManager.GetSession(petition.WorldId);
             if (worldSession == null)
             {
                 SendResponse(session, petitionId, PetitionErrorCode.WorldDown);
                 return;
             }
 
-            var gmCharacter = session.GetCharacter(petition.mWorldId);
+            var gmCharacter = session.GetCharacter(petition.WorldId);
             var result = petition.UndoCheckOut(gmCharacter);
 
             SendResponse(session, petitionId, result);
@@ -46,7 +46,7 @@ public class UndoCheckOutPacket(
                 // Notify World Server
                 var worldResponse = new Packer((byte)PacketType.W_NOTIFY_FINISH2);
                 worldResponse.AddInt32(petitionId);
-                worldResponse.AddUInt8((byte)Config.MaxQuota);
+                worldResponse.AddUInt8(Config.MaxQuota);
                 worldResponse.AddUInt8((byte)petition.QuotaAfterTreat);
                 worldResponse.AddUInt8((byte)result);
                 worldSession.Send(worldResponse.ToArray());
@@ -87,7 +87,7 @@ public class UndoCheckOutPacket(
     private static void NotifyReassignment(WorldSession worldSession, Petition petition)
     {
         var notification = new Packer((byte)PacketType.G_NOTIFY_ASSIGN);
-        notification.AddInt32(petition.mPetitionId);
+        notification.AddInt32(petition.PetitionId);
         notification.AddString(petition.mAssignedGm.CharName);
         notification.AddInt32(petition.mAssignedGm.CharUid);
         worldSession.BroadcastToGm(notification.ToArray());

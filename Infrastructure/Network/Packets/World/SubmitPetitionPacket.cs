@@ -69,7 +69,7 @@ public class SubmitPetitionPacket(
     {
         var response = new Packer((byte)PacketType.W_SUBMIT_PETITION_OK4);
         response.AddInt32(requestId);
-        response.AddInt32(petition.mPetitionId);
+        response.AddInt32(petition.PetitionId);
         response.AddASCIIString(petition.mPetitionSeq, MaxLen.PetitionSeq);
         response.AddUInt16((ushort)petition.GetActivePetitionCount());
         response.AddString(petition.mForcedGm.CharName, MaxLen.CharName);

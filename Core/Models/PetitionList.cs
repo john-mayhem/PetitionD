@@ -232,4 +232,39 @@ public class PetitionList
             }
         }
     }
+
+    public void AddPetition(Petition petition)
+    {
+        lock (_lock)
+        {
+            _activePetitions[petition.PetitionId] = petition;
+
+            if (!_worldPetitions.TryGetValue(petition.WorldId, out var worldPetitions))
+            {
+                worldPetitions = new Dictionary<int, Petition>();
+                _worldPetitions[petition.WorldId] = worldPetitions;
+            }
+
+            worldPetitions[petition.PetitionId] = petition;
+        }
+    }
+
+    public Petition RemoveActivePetition(int petitionId)
+    {
+        lock (_lock)
+        {
+            if (_activePetitions.TryGetValue(petitionId, out var petition))
+            {
+                _activePetitions.Remove(petitionId);
+
+                if (_worldPetitions.TryGetValue(petition.WorldId, out var worldPetitions))
+                {
+                    worldPetitions.Remove(petitionId);
+                }
+
+                return petition;
+            }
+            return null;
+        }
+    }
 }

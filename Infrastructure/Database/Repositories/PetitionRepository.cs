@@ -161,13 +161,13 @@ public class PetitionRepository
         var parameters = new
         {
             PetitionSeq = petitionSeq,
-            Race = info.mRace,
-            Class = info.mClass,
-            Level = info.mLevel,
-            Disposition = info.mDisposition,
-            SsPosition = info.mSsPosition,
-            NewChar = info.mNewChar,
-            Coordinate = info.mCoordinate
+            Race = info.Race,
+            Class = info.Class,
+            Level = info.Level,
+            Disposition = info.Disposition,
+            SsPosition = info.SsPosition,
+            NewChar = info.NewChar,
+            Coordinate = info.Coordinate
         };
 
         await _dbContext.ExecuteStoredProcAsync(

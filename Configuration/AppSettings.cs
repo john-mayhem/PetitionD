@@ -3,6 +3,9 @@ namespace PetitionD.Configuration;
 
 public class AppSettings
 {
+    public int GmServicePort { get; set; }
+    public int WorldServicePort { get; set; }
+    public int NoticeServicePort { get; set; }
     public int ServerBuildNumber { get; set; } = 20011;
     public int MaxQuota { get; set; } = 5;
     public int MaxActivePetition { get; set; } = 100000;
@@ -21,4 +24,7 @@ public class AppSettings
     public int MinimumGmClientBuildNumber { get; set; }
     public bool EnableGmStatusDump { get; set; }
     public bool EnableOnlineCheck { get; set; }
+    public string[] NoticeServiceAllowIpList { get; set; } = Array.Empty<string>();
+    public bool DumpPacket { get; set; }
+    public string RunMode { get; set; } = "Normal";
 }

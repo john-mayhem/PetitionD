@@ -32,7 +32,7 @@ public class CancelPetitionPacket(
 
             if (result == PetitionErrorCode.Success)
             {
-                petitionList.RemoveActivePetition(petition.mPetitionId);
+                petitionList.RemoveActivePetition(petition.PetitionId);
                 SendSuccessResponse(worldSession, requesterName, requesterCharUid,
                     userName, userCharUid, petition);
 
@@ -40,7 +40,7 @@ public class CancelPetitionPacket(
                 NotifyGmsPetitionCancelled(worldSession, petition);
 
                 // Handle reassignments if necessary
-                var reassignedPetitions = AssignLogic.Assign(petition.mWorldId);
+                var reassignedPetitions = AssignLogic.Assign(petition.WorldId);
                 foreach (var reassigned in reassignedPetitions)
                 {
                     NotifyGmsPetitionReassigned(worldSession, reassigned);
@@ -49,7 +49,7 @@ public class CancelPetitionPacket(
             else
             {
                 SendErrorResponse(worldSession, requesterName, requesterCharUid,
-                    result, petition.mForcedGm, userName, userCharUid);
+                    result, petition.ForcedGm, userName, userCharUid);
             }
         }
         catch (Exception ex)
@@ -71,7 +71,7 @@ public class CancelPetitionPacket(
         response.AddInt32(requesterCharUid);
         response.AddString(userName, MaxLen.CharName);
         response.AddInt32(userCharUid);
-        response.AddInt32(petition.mPetitionId);
+        response.AddInt32(petition.PetitionId);
         response.AddASCIIString(petition.mPetitionSeq, MaxLen.PetitionSeq);
         response.AddString(petition.mForcedGm.CharName, MaxLen.CharName);
         response.AddInt32(petition.mForcedGm.CharUid);
@@ -105,14 +105,14 @@ public class CancelPetitionPacket(
     private static void NotifyGmsPetitionCancelled(WorldSession session, Petition petition)
     {
         var notification = new Packer((byte)PacketType.G_NOTIFY_FINISH);
-        notification.AddInt32(petition.mPetitionId);
+        notification.AddInt32(petition.PetitionId);
         session.BroadcastToGm(notification.ToArray());
     }
 
     private static void NotifyGmsPetitionReassigned(WorldSession session, Petition petition)
     {
         var notification = new Packer((byte)PacketType.G_NOTIFY_ASSIGN);
-        notification.AddInt32(petition.mPetitionId);
+        notification.AddInt32(petition.PetitionId);
         notification.AddString(petition.mAssignedGm.CharName);
         notification.AddInt32(petition.mAssignedGm.CharUid);
         session.BroadcastToGm(notification.ToArray());

@@ -4,7 +4,7 @@ using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Core.Models;
 
 
-namespace PetitionD.Infrastructure.Network.Packets.Petition;
+namespace PetitionD.Infrastructure.Network.Packets.PetitionHandlers;
 
 public class CheckOutPetitionPacket(
     ILogger<CheckOutPetitionPacket> logger,
@@ -76,14 +76,14 @@ public class CheckOutPetitionPacket(
     private static void NotifyUnassignment(WorldSession worldSession, Petition petition)
     {
         var notification = new Packer((byte)PacketType.G_NOTIFY_UNASSIGN);
-        notification.AddInt32(petition.mPetitionId);
+        notification.AddInt32(petition.PetitionId);
         worldSession.BroadcastToGm(notification.ToArray());
     }
 
     private static void NotifyReassignment(WorldSession worldSession, Petition petition)
     {
         var notification = new Packer((byte)PacketType.G_NOTIFY_ASSIGN);
-        notification.AddInt32(petition.mPetitionId);
+        notification.AddInt32(petition.PetitionId);
         notification.AddString(petition.mAssignedGm.CharName);
         notification.AddInt32(petition.mAssignedGm.CharUid);
         worldSession.BroadcastToGm(notification.ToArray());

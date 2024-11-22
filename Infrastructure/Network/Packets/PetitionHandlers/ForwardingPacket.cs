@@ -1,23 +1,23 @@
-﻿// File: Infrastructure/Network/Packets/Petition/AddMemoPacket.cs
+﻿// File: Infrastructure/Network/Packets/Petition/ForwardingPacket.cs
 using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Core.Models;
 using PetitionD.Infrastructure.Network.Packets.Base;
-using PetitionD.Core.Models;
 
-namespace PetitionD.Infrastructure.Network.Packets.Petition
+namespace PetitionD.Infrastructure.Network.Packets.PetitionHandlers
 {
-    public class AddMemoPacket(
-        ILogger<AddMemoPacket> logger,
+    public class ForwardingPacket(
+        ILogger<ForwardingPacket> logger,
         PetitionList petitionList,
-        WorldSessionManager worldSessionManager) : GmPacketBase(PacketType.G_ADD_MEMO)
+        WorldSessionManager worldSessionManager) : GmPacketBase(PacketType.G_FORWARDING)
     {
         public override void Handle(GmSession session, Unpacker unpacker)
         {
             try
             {
                 var petitionId = unpacker.GetInt32();
-                var content = unpacker.GetStringMax(MaxLen.PetMemoLen);
+                var flag = unpacker.GetUInt8();
+                var newGrade = (Grade)unpacker.GetUInt8();
 
                 var petition = petitionList.GetPetition(petitionId);
                 if (petition == null)
@@ -26,37 +26,31 @@ namespace PetitionD.Infrastructure.Network.Packets.Petition
                     return;
                 }
 
-                var worldSession = worldSessionManager.GetSession(petition.mWorldId);
-                if (worldSession == null)
-                {
-                    SendResponse(session, petitionId, PetitionErrorCode.WorldDown);
-                    return;
-                }
-
-                var gmCharacter = session.GetCharacter(petition.mWorldId);
-                var result = petition.AddMemo(gmCharacter, content);
+                var gmCharacter = session.GetCharacter(petition.WorldId);
+                var result = petition.ForwardCheckIn(gmCharacter, newGrade, flag);
 
                 SendResponse(session, petitionId, result);
 
                 if (result == PetitionErrorCode.Success)
                 {
-                    var notification = new Packer((byte)PacketType.G_NOTIFY_NEW_MEMO);
+                    var notification = new Packer((byte)PacketType.G_NOTIFY_FORWARDING);
                     notification.AddInt32(petitionId);
-                    notification.AddString(petition.mCheckOutGm.CharName);
+                    notification.AddUInt8(flag);
+                    notification.AddString(gmCharacter.CharName);
                     notification.AddDateTime(DateTime.Now);
-                    notification.AddString(content);
-                    worldSession.BroadcastToGmExcept(notification.ToArray(), session);
+                    notification.AddUInt8((byte)newGrade);
+                    worldSessionManager.GetSession(petition.WorldId)?.BroadcastToGmExcept(notification.ToArray(), session);
                 }
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error handling memo addition");
+                logger.LogError(ex, "Error handling petition forwarding");
             }
         }
 
         private static void SendResponse(GmSession session, int petitionId, PetitionErrorCode errorCode)
         {
-            var response = new Packer((byte)PacketType.G_ACCEPT_NEW_MEMO);
+            var response = new Packer((byte)PacketType.G_ACCEPT_FORWARDING);
             response.AddInt32(petitionId);
             response.AddDateTime(DateTime.Now);
             response.AddUInt8((byte)errorCode);
@@ -64,6 +58,6 @@ namespace PetitionD.Infrastructure.Network.Packets.Petition
         }
 
         public override byte[] Serialize() =>
-            new Packer((byte)PacketType.G_ADD_MEMO).ToArray();
+            new Packer((byte)PacketType.G_FORWARDING).ToArray();
     }
 }

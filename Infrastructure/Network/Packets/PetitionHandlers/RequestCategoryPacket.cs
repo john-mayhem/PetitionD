@@ -5,7 +5,7 @@ using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Core.Models;
 
-namespace PetitionD.Infrastructure.Network.Packets.Petition;
+namespace PetitionD.Infrastructure.Network.Packets.PetitionHandlers;
 
 public class RequestCategoryPacket(ILogger<RequestCategoryPacket> logger) : GmPacketBase(PacketType.G_REQUEST_CATEGORY)
 {

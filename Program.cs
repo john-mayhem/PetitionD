@@ -14,6 +14,7 @@ using PetitionD.Infrastructure.Database.Repositories;
 using PetitionD.Infrastructure.Database;
 using PetitionD.Core.Models;
 using PetitionD.Core.Services;
+using PetitionD.Infrastructure.Resilience;
 
 namespace PetitionD;
 
@@ -82,6 +83,9 @@ static class Program
         services.AddSingleton<TemplateRepository>();
         services.AddSingleton<GmRepository>();
         services.AddSingleton<IPetitionService, PetitionService>();
+        services.AddSingleton<CircuitBreaker>();
+        services.AddSingleton<RetryPolicy>();
+        services.AddSingleton<ResiliencePolicy>();
 
         services.AddSingleton(sp => new NoticeService(
             sp.GetRequiredService<ILogger<NoticeService>>(),

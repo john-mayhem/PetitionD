@@ -5,23 +5,16 @@ using PetitionD.Configuration;
 
 namespace PetitionD.Infrastructure.Network.Sessions;
 
-public class NoticeSession : BaseSession
+public class NoticeSession(
+    ILogger<NoticeSession> logger,
+    WorldSessionManager worldSessionManager,
+    AppSettings settings) : BaseSession(logger)
 {
-    private readonly ILogger<NoticeSession> _logger;
-    private readonly WorldSessionManager _worldSessionManager;
-    private readonly AppSettings _settings;
+    private readonly ILogger<NoticeSession> _logger = logger;
+    private readonly WorldSessionManager _worldSessionManager = worldSessionManager;
+    private readonly AppSettings _settings = settings;
 
     public string RemoteIp { get; private set; } = string.Empty;
-
-    public NoticeSession(
-        ILogger<NoticeSession> logger,
-        WorldSessionManager worldSessionManager,
-        AppSettings settings) : base(logger)
-    {
-        _logger = logger;
-        _worldSessionManager = worldSessionManager;
-        _settings = settings;
-    }
 
     protected override void OnReceived(byte[] packet)
     {

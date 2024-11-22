@@ -2,15 +2,10 @@
 
 namespace PetitionD.Infrastructure.Network;
 
-public class WorldSessionManager
+public class WorldSessionManager(ILogger<WorldSessionManager> logger)
 {
-    private readonly ILogger<WorldSessionManager> _logger;
+    private readonly ILogger<WorldSessionManager> _logger = logger;
     private readonly ConcurrentDictionary<int, WorldSession> _sessions = new();
-
-    public WorldSessionManager(ILogger<WorldSessionManager> logger)
-    {
-        _logger = logger;
-    }
 
     public void AddSession(WorldSession session)
     {

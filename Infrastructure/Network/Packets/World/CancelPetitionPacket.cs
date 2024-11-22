@@ -72,11 +72,11 @@ public class CancelPetitionPacket(
         response.AddString(userName, MaxLen.CharName);
         response.AddInt32(userCharUid);
         response.AddInt32(petition.PetitionId);
-        response.AddASCIIString(petition.mPetitionSeq, MaxLen.PetitionSeq);
-        response.AddString(petition.mForcedGm.CharName, MaxLen.CharName);
-        response.AddInt32(petition.mForcedGm.CharUid);
+        response.AddASCIIString(petition.PetitionSeq, MaxLen.PetitionSeq);
+        response.AddString(petition.ForcedGm.CharName, MaxLen.CharName);
+        response.AddInt32(petition.ForcedGm.CharUid);
         response.AddUInt8((byte)Config.MaxQuota);
-        response.AddUInt8((byte)(Config.MaxQuota - petition.mQuotaAfterTreat));
+        response.AddUInt8((byte)(Config.MaxQuota - petition.QuotaAfterTreat));
         session.Send(response.ToArray());
     }
 
@@ -113,8 +113,8 @@ public class CancelPetitionPacket(
     {
         var notification = new Packer((byte)PacketType.G_NOTIFY_ASSIGN);
         notification.AddInt32(petition.PetitionId);
-        notification.AddString(petition.mAssignedGm.CharName);
-        notification.AddInt32(petition.mAssignedGm.CharUid);
+        notification.AddString(petition.AssignedGm.CharName);
+        notification.AddInt32(petition.AssignedGm.CharUid);
         session.BroadcastToGm(notification.ToArray());
     }
 

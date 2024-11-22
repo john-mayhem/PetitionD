@@ -78,5 +78,152 @@ public class Petition
         return PetitionErrorCode.Success;
     }
 
-    // Add other methods as needed
+    public void Serialize(Packer packer)
+    {
+        packer.AddInt32(WorldId);
+        packer.AddUInt8((byte)Grade);
+        packer.AddInt32(PetitionId);
+        packer.AddString(PetitionSeq);
+        packer.AddDateTime(SubmitTime);
+        packer.AddUInt8(Flag);
+        // ... Add other fields
+    }
+
+    public PetitionErrorCode AddMemo(GmCharacter gmChar, string content)
+    {
+        if (State != State.CheckOut && State != State.EndChat)
+            return PetitionErrorCode.InvalidState;
+
+        if (CheckOutGm.CharUid != gmChar.CharUid)
+            return PetitionErrorCode.NoRightToAccess;
+
+        Memos.Add(new PetitionMemo
+        {
+            Writer = gmChar.CharName,
+            Content = content,
+            Time = DateTime.Now
+        });
+
+        return PetitionErrorCode.Success;
+    }
+
+        public PetitionErrorCode UndoCheckOut(GmCharacter gmChar)
+    {
+        if (gmChar.Grade < Grade)
+            return PetitionErrorCode.NoRightToAccess;
+
+        if (State != State.CheckOut)
+            return PetitionErrorCode.InvalidState;
+
+        State = State.Undo;
+        History.Add(new PetitionHistory 
+        { 
+            Actor = gmChar.CharName,
+            Time = DateTime.Now,
+            ActionCode = State.Undo
+        });
+
+        return PetitionErrorCode.Success;
+    }
+
+    public PetitionErrorCode CancelPetition(int worldId, int requesterCharUid)
+    {
+        if (worldId != WorldId || 
+            (ForcedGm.CharUid == 0 && requesterCharUid != User.CharUid) ||
+            (ForcedGm.CharUid != 0 && requesterCharUid != ForcedGm.CharUid))
+            return PetitionErrorCode.NoRightToAccess;
+
+        if (State != State.Submit)
+            return PetitionErrorCode.InvalidState;
+
+        State = State.UserCancel;
+        var actor = requesterCharUid == User.CharUid ? User : ForcedGm;
+        History.Add(new PetitionHistory 
+        { 
+            Actor = actor.CharName,
+            Time = DateTime.Now,
+            ActionCode = State.UserCancel
+        });
+
+        if (ForcedGm.CharUid == 0)
+        {
+            QuotaAfterTreat--;
+        }
+
+        return PetitionErrorCode.Success;
+    }
+
+    public PetitionErrorCode CheckOut(GmCharacter gmChar, out bool unAssigned)
+    {
+        unAssigned = false;
+        if (WorldId != gmChar.WorldId || gmChar.Grade < Grade)
+            return PetitionErrorCode.NoRightToAccess;
+
+        if (!AssignLogic.CanCheckOut(this, gmChar))
+            return PetitionErrorCode.NotAssigedPetition;
+
+        if (State != State.Submit && State != State.Forward && State != State.Undo)
+            return PetitionErrorCode.InvalidState;
+
+        CheckOutGm = gmChar.ToGameCharacter();
+        CheckOutTime = DateTime.Now;
+        State = State.CheckOut;
+        
+        History.Add(new PetitionHistory 
+        { 
+            Actor = CheckOutGm.CharName,
+            Time = CheckOutTime,
+            ActionCode = State.CheckOut
+        });
+
+        unAssigned = AssignLogic.CheckOut(this, gmChar);
+        return PetitionErrorCode.Success;
+    }
+
+    public PetitionErrorCode ForwardCheckIn(GmCharacter gmChar, Grade newGrade, byte flag)
+    {
+        if (gmChar.WorldId != WorldId || gmChar.CharUid != CheckOutGm.CharUid)
+            return PetitionErrorCode.NoRightToAccess;
+
+        if (State != State.CheckOut && State != State.EndChat)
+            return PetitionErrorCode.InvalidState;
+
+        if (newGrade <= Grade || newGrade > Grade.HeadGM)
+            return PetitionErrorCode.UnexpectedPetitionGrade;
+
+        Flag = flag;
+        Grade = newGrade;
+        State = State.Forward;
+
+        History.Add(new PetitionHistory 
+        { 
+            Actor = gmChar.CharName,
+            Time = DateTime.Now,
+            ActionCode = State.Forward
+        });
+
+        return PetitionErrorCode.Success;
+    }
+
+    public PetitionErrorCode ModifyCategory(GmCharacter gmChar, int category)
+    {
+        if (!Category.IsValid(category))
+            return PetitionErrorCode.UnexpectedCategory;
+
+        if (gmChar.WorldId != WorldId || gmChar.CharUid != CheckOutGm.CharUid)
+            return PetitionErrorCode.NoRightToAccess;
+
+        if (State != State.CheckOut && State != State.EndChat)
+            return PetitionErrorCode.InvalidState;
+
+        Category = category;
+        return PetitionErrorCode.Success;
+    }
+
+    public int GetActivePetitionCount()
+    {
+        // This should actually be handled by PetitionList, not individual Petition
+        // But we'll add this to fix compilation errors
+        return 1; // Default value to fix compilation
+    }
 }

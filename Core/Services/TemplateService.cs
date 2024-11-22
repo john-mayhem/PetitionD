@@ -5,19 +5,13 @@ using System.Collections.Concurrent;
 
 namespace PetitionD.Core.Services;
 
-public class TemplateService
+public class TemplateService(
+    TemplateRepository templateRepository,
+    ILogger<TemplateService> logger)
 {
-    private readonly TemplateRepository _templateRepository;
-    private readonly ILogger<TemplateService> _logger;
+    private readonly TemplateRepository _templateRepository = templateRepository;
+    private readonly ILogger<TemplateService> _logger = logger;
     private readonly ConcurrentDictionary<int, List<Template>> _templateCache = new();
-
-    public TemplateService(
-        TemplateRepository templateRepository,
-        ILogger<TemplateService> logger)
-    {
-        _templateRepository = templateRepository;
-        _logger = logger;
-    }
 
     public async Task<IEnumerable<Template>> GetTemplatesForGmAsync(
         int gmAccountUid,

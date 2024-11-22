@@ -70,12 +70,12 @@ public class SubmitPetitionPacket(
         var response = new Packer((byte)PacketType.W_SUBMIT_PETITION_OK4);
         response.AddInt32(requestId);
         response.AddInt32(petition.PetitionId);
-        response.AddASCIIString(petition.mPetitionSeq, MaxLen.PetitionSeq);
+        response.AddASCIIString(petition.PetitionSeq, MaxLen.PetitionSeq);
         response.AddUInt16((ushort)petition.GetActivePetitionCount());
-        response.AddString(petition.mForcedGm.CharName, MaxLen.CharName);
-        response.AddInt32(petition.mForcedGm.CharUid);
+        response.AddString(petition.ForcedGm.CharName, MaxLen.CharName);
+        response.AddInt32(petition.ForcedGm.CharUid);
         response.AddUInt8((byte)Config.MaxQuota);
-        response.AddUInt8((byte)(Config.MaxQuota - petition.mQuotaAtSubmit - 1));
+        response.AddUInt8((byte)(Config.MaxQuota - petition.QuotaAtSubmit - 1));
         session.Send(response.ToArray());
     }
 

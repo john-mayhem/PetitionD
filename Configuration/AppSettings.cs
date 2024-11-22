@@ -24,7 +24,7 @@ public class AppSettings
     public int MinimumGmClientBuildNumber { get; set; }
     public bool EnableGmStatusDump { get; set; }
     public bool EnableOnlineCheck { get; set; }
-    public string[] NoticeServiceAllowIpList { get; set; } = Array.Empty<string>();
+    public string[] NoticeServiceAllowIpList { get; set; } = [];
     public bool DumpPacket { get; set; }
     public string RunMode { get; set; } = "Normal";
 }

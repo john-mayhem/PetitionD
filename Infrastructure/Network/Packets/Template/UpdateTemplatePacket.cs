@@ -8,8 +8,6 @@ namespace PetitionD.Infrastructure.Network.Packets.Template;
 public class UpdateTemplatePacket(ILogger<UpdateTemplatePacket> logger)
     : GmPacketBase(PacketType.G_UPDATE_TEMPLATE)
 {
-    private readonly ILogger<UpdateTemplatePacket> _logger = logger;
-
     public override void Handle(GmSession session, Unpacker unpacker)
     {
         try
@@ -20,7 +18,7 @@ public class UpdateTemplatePacket(ILogger<UpdateTemplatePacket> logger)
             var content = unpacker.GetStringMax(MaxLen.TemplateContent);
             var order = unpacker.GetInt32();
 
-            var result = Template.Update(
+            var result = Template.Operations.Update(
                 session.AccountUid,
                 session.Account,
                 code,
@@ -37,7 +35,7 @@ public class UpdateTemplatePacket(ILogger<UpdateTemplatePacket> logger)
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error handling template update");
+            logger.LogError(ex, "Error handling template update");
         }
     }
 

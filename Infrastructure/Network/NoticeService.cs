@@ -6,27 +6,17 @@ using PetitionD.Configuration;
 
 namespace PetitionD.Infrastructure.Network;
 
-public class NoticeService : NetworkBase
+public class NoticeService(
+    ILogger<NoticeService> logger,
+    WorldSessionManager worldSessionManager,
+    ILoggerFactory loggerFactory,
+    AppSettings settings) : NetworkBase(settings.NoticeServicePort)
 {
-    private readonly ILogger<NoticeService> _logger;
-    private readonly WorldSessionManager _worldSessionManager;
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly AppSettings _settings;
-    private readonly HashSet<string> _allowedIps;
-
-    public NoticeService(
-        ILogger<NoticeService> logger,
-        WorldSessionManager worldSessionManager,
-        ILoggerFactory loggerFactory,
-        AppSettings settings)
-        : base(settings.NoticeServicePort)
-    {
-        _logger = logger;
-        _worldSessionManager = worldSessionManager;
-        _loggerFactory = loggerFactory;
-        _settings = settings;
-        _allowedIps = new HashSet<string>(settings.NoticeServiceAllowIpList.Split(','));
-    }
+    private readonly ILogger<NoticeService> _logger = logger;
+    private readonly WorldSessionManager _worldSessionManager = worldSessionManager;
+    private readonly ILoggerFactory _loggerFactory = loggerFactory;
+    private readonly AppSettings _settings = settings;
+    private readonly HashSet<string> _allowedIps = new(settings.NoticeServiceAllowIpList.Split(','));
 
     protected override void OnSocketAccepted(ListenerSocket listener, Socket socket)
     {

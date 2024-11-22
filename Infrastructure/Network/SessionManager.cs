@@ -6,15 +6,10 @@ using PetitionD.Infrastructure.Network.Sessions;
 
 namespace PetitionD.Infrastructure.Network;
 
-public class SessionManager : ISessionManager
+public class SessionManager(ILogger<SessionManager> logger) : ISessionManager
 {
     private readonly ConcurrentDictionary<string, ISession> _sessions = new();
-    private readonly ILogger<SessionManager> _logger;
-
-    public SessionManager(ILogger<SessionManager> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<SessionManager> _logger = logger;
 
     public void AddSession(ISession session)
     {

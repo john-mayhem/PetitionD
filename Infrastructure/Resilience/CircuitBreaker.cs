@@ -9,28 +9,20 @@ public enum CircuitState
     HalfOpen     // Testing if service is back
 }
 
-public class CircuitBreaker
+public class CircuitBreaker(
+    ILogger<CircuitBreaker> logger,
+    int failureThreshold = 5,
+    int resetTimeoutSeconds = 60)
 {
-    private readonly ILogger<CircuitBreaker> _logger;
-    private readonly int _failureThreshold;
-    private readonly TimeSpan _resetTimeout;
+    private readonly ILogger<CircuitBreaker> _logger = logger;
+    private readonly int _failureThreshold = failureThreshold;
+    private readonly TimeSpan _resetTimeout = TimeSpan.FromSeconds(resetTimeoutSeconds);
     private readonly object _lock = new();
 
-    private CircuitState _state;
+    private CircuitState _state = CircuitState.Closed;
     private int _failureCount;
     private DateTime? _lastFailureTime;
     private DateTime? _openTime;
-
-    public CircuitBreaker(
-        ILogger<CircuitBreaker> logger,
-        int failureThreshold = 5,
-        int resetTimeoutSeconds = 60)
-    {
-        _logger = logger;
-        _failureThreshold = failureThreshold;
-        _resetTimeout = TimeSpan.FromSeconds(resetTimeoutSeconds);
-        _state = CircuitState.Closed;
-    }
 
     public async Task<T> ExecuteAsync<T>(
         Func<CancellationToken, Task<T>> action,

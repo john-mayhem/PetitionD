@@ -1,23 +1,15 @@
 ﻿namespace PetitionD.Infrastructure.Resilience;
 
-public class RetryPolicy
+public class RetryPolicy(
+    ILogger<RetryPolicy> logger,
+    int maxRetries = 3,
+    int delayMilliseconds = 100,
+    double exponentialBase = 2.0)
 {
-    private readonly ILogger<RetryPolicy> _logger;
-    private readonly int _maxRetries;
-    private readonly TimeSpan _delay;
-    private readonly double _exponentialBase;
-
-    public RetryPolicy(
-        ILogger<RetryPolicy> logger,
-        int maxRetries = 3,
-        int delayMilliseconds = 100,
-        double exponentialBase = 2.0)
-    {
-        _logger = logger;
-        _maxRetries = maxRetries;
-        _delay = TimeSpan.FromMilliseconds(delayMilliseconds);
-        _exponentialBase = exponentialBase;
-    }
+    private readonly ILogger<RetryPolicy> _logger = logger;
+    private readonly int _maxRetries = maxRetries;
+    private readonly TimeSpan _delay = TimeSpan.FromMilliseconds(delayMilliseconds);
+    private readonly double _exponentialBase = exponentialBase;
 
     public async Task<T> ExecuteAsync<T>(
         Func<CancellationToken, Task<T>> action,

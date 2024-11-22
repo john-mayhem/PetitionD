@@ -6,18 +6,12 @@ using System.Transactions;
 
 namespace PetitionD.Infrastructure.Database.Repositories;
 
-public class GmRepository
+public class GmRepository(
+    DbContext dbContext,
+    ILogger<GmRepository> logger)
 {
-    private readonly DbContext _dbContext;
-    private readonly ILogger<GmRepository> _logger;
-
-    public GmRepository(
-        DbContext dbContext,
-        ILogger<GmRepository> logger)
-    {
-        _dbContext = dbContext;
-        _logger = logger;
-    }
+    private readonly DbContext _dbContext = dbContext;
+    private readonly ILogger<GmRepository> _logger = logger;
 
     public async Task<(bool IsValid, int AccountUid, Grade Grade)> ValidateGmCredentialsAsync(
         string account,
@@ -120,7 +114,7 @@ public class GmRepository
         {
             _logger.LogError(ex, "Failed to get GM characters for account {AccountUid} in world {WorldId}",
                 accountUid, worldId);
-            return new List<GmCharacter>();
+            return [];
         }
     }
 }

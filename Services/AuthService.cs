@@ -15,13 +15,13 @@ public class AuthService(ILogger<AuthService> logger, IDbRepository repository) 
     {
         try
         {
-            var (IsValid, AccountUid) = await repository.ValidateGmCredentialsAsync(account, password);
+            var (IsValid, AccountUid, _) = await repository.ValidateGmCredentialsAsync(account, password);
 
             if (IsValid)
             {
                 var sessionToken = GenerateSessionToken();
                 _activeSessions[AccountUid] = sessionToken;
-                return (PetitionErrorCode.Success, AccountUid);
+                return (PetitionErrorCode.Success, AccountUdid);
             }
 
             return (PetitionErrorCode.IncorrectPassword, 0);

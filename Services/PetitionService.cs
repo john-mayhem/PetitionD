@@ -6,25 +6,17 @@ using System.Transactions;
 
 namespace PetitionD.Services;
 
-public class PetitionService : IPetitionService
+public class PetitionService(
+    PetitionRepository petitionRepository,
+    QuotaService quotaService,
+    PetitionList petitionList,
+    ILogger<PetitionService> logger) : IPetitionService
 {
-    private readonly PetitionRepository _petitionRepository;
-    private readonly QuotaService _quotaService;
-    private readonly ILogger<PetitionService> _logger;
-    private readonly PetitionList _petitionList;
+    private readonly PetitionRepository _petitionRepository = petitionRepository;
+    private readonly QuotaService _quotaService = quotaService;
+    private readonly ILogger<PetitionService> _logger = logger;
+    private readonly PetitionList _petitionList = petitionList;
     private readonly SemaphoreSlim _syncLock = new(1, 1);
-
-    public PetitionService(
-        PetitionRepository petitionRepository,
-        QuotaService quotaService,
-        PetitionList petitionList,
-        ILogger<PetitionService> logger)
-    {
-        _petitionRepository = petitionRepository;
-        _quotaService = quotaService;
-        _petitionList = petitionList;
-        _logger = logger;
-    }
 
     public async Task<(PetitionErrorCode ErrorCode, Petition? Petition)> SubmitPetitionAsync(
         int worldId,
@@ -197,7 +189,7 @@ public class PetitionService : IPetitionService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting active petitions for world {WorldId}", worldId);
-            return Enumerable.Empty<Petition>();
+            return [];
         }
     }
 
@@ -250,4 +242,19 @@ public class PetitionService : IPetitionService
             _syncLock.Release();
         }
     }
+
+    private PetitionErrorCode ValidatePetition(
+    byte category, 
+    GameCharacter user, 
+    string content)
+{
+    if (string.IsNullOrEmpty(content))
+        return PetitionErrorCode.InvalidContent;
+        
+    if (!Category.IsValid(category))
+        return PetitionErrorCode.UnexpectedCategory;
+        
+    // Add more validation
+    return PetitionErrorCode.Success;
+}
 }

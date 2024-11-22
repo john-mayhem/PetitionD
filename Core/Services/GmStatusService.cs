@@ -3,20 +3,15 @@ using NC.PetitionLib;
 
 namespace PetitionD.Core.Services;
 
-public class GmStatusService
+public class GmStatusService(ILogger<GmStatusService> logger)
 {
     private readonly ConcurrentDictionary<int, HashSet<string>> _worldGms = new();
-    private readonly ILogger<GmStatusService> _logger;
+    private readonly ILogger<GmStatusService> _logger = logger;
     private readonly object _syncLock = new();
-
-    public GmStatusService(ILogger<GmStatusService> logger)
-    {
-        _logger = logger;
-    }
 
     public void Add(int worldId, string gmCharName)
     {
-        var gms = _worldGms.GetOrAdd(worldId, _ => new HashSet<string>());
+        var gms = _worldGms.GetOrAdd(worldId, _ => []);
         lock (_syncLock)
         {
             if (gms.Add(gmCharName))
@@ -62,7 +57,7 @@ public class GmStatusService
                 return gms.ToList().AsReadOnly();
             }
         }
-        return Array.Empty<string>();
+        return [];
     }
 
     public int GetOnlineGmCount(int worldId)

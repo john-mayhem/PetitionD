@@ -6,22 +6,17 @@ using PetitionD.Core.Enums;
 
 namespace PetitionD.Core.Models;
 
-public class PetitionList
+public class PetitionList(ILogger<PetitionList> logger)
 {
     private readonly Dictionary<int, Petition> _activePetitions = [];
     private readonly Dictionary<int, Dictionary<int, Petition>> _worldPetitions = [];
     private readonly Dictionary<string, Petition> _completedPetitions = [];
-    private readonly ILogger<PetitionList> _logger;
+    private readonly ILogger<PetitionList> _logger = logger;
     private static int _lastPetitionId;
     private static DateTime _lastPetitionSeqDate = DateTime.Today;
     private static int _lastPetitionSeqSerial;
 
     private readonly object _lock = new();
-
-    public PetitionList(ILogger<PetitionList> logger)
-    {
-        _logger = logger;
-    }
 
     public static void InitializeSequence()
     {
@@ -95,7 +90,7 @@ public class PetitionList
 
             if (!_worldPetitions.TryGetValue(worldId, out var worldPetitions))
             {
-                worldPetitions = new Dictionary<int, Petition>();
+                worldPetitions = [];
                 _worldPetitions[worldId] = worldPetitions;
             }
 
@@ -139,7 +134,7 @@ public class PetitionList
             {
                 return new Dictionary<int, Petition>(worldPetitions);
             }
-            return new Dictionary<int, Petition>();
+            return [];
         }
     }
 
@@ -241,7 +236,7 @@ public class PetitionList
 
             if (!_worldPetitions.TryGetValue(petition.WorldId, out var worldPetitions))
             {
-                worldPetitions = new Dictionary<int, Petition>();
+                worldPetitions = [];
                 _worldPetitions[petition.WorldId] = worldPetitions;
             }
 

@@ -8,20 +8,15 @@ using PetitionD.Core.Enums;
 
 namespace PetitionD.Infrastructure.Database.Repositories;
 
-public class PetitionRepository
+public class PetitionRepository(
+    DbContext dbContext,
+    ILogger<PetitionRepository> logger)
 {
-    private readonly DbContext _dbContext;
-    private readonly ILogger<PetitionRepository> _logger;
-
-    public PetitionRepository(
-        DbContext dbContext,
-        ILogger<PetitionRepository> logger)
-    {
-        _dbContext = dbContext;
-        _logger = logger;
-    }
+    private readonly DbContext _dbContext = dbContext;
+    private readonly ILogger<PetitionRepository> _logger = logger;
 
     public async Task<(PetitionErrorCode ErrorCode, string PetitionSeq)> CreatePetitionAsync(
+        int worldId,
         Petition petition,
         CancellationToken cancellationToken = default)
     {
@@ -34,11 +29,11 @@ public class PetitionRepository
                 Seq = petition.PetitionSeq,
                 Category = (byte)petition.Category,
                 WorldId = (byte)petition.WorldId,
-                AccountName = petition.User.AccountName,
-                AccountUid = petition.User.AccountUid,
-                CharName = petition.User.CharName,
-                CharUid = petition.User.CharUid,
-                Content = petition.Content,
+                petition.User.AccountName,
+                petition.User.AccountUid,
+                petition.User.CharName,
+                petition.User.CharUid,
+                petition.Content,
                 ForcedGmAccountName = petition.ForcedGm.AccountName,
                 ForcedGmAccountUid = petition.ForcedGm.AccountUid,
                 ForcedGmCharName = petition.ForcedGm.CharName,
@@ -161,13 +156,13 @@ public class PetitionRepository
         var parameters = new
         {
             PetitionSeq = petitionSeq,
-            Race = info.Race,
-            Class = info.Class,
-            Level = info.Level,
-            Disposition = info.Disposition,
-            SsPosition = info.SsPosition,
-            NewChar = info.NewChar,
-            Coordinate = info.Coordinate
+            info.Race,
+            info.Class,
+            info.Level,
+            info.Disposition,
+            info.SsPosition,
+            info.NewChar,
+            info.Coordinate
         };
 
         await _dbContext.ExecuteStoredProcAsync(
@@ -244,10 +239,10 @@ public class PetitionRepository
             {
                 Seq = petitionSeq,
                 HistorySeq = 0, // Will be calculated by SP
-                AccountName = actor.AccountName,
-                AccountUid = actor.AccountUid,
-                CharName = actor.CharName,
-                CharUid = actor.CharUid,
+                actor.AccountName,
+                actor.AccountUid,
+                actor.CharName,
+                actor.CharUid,
                 State = (byte)newState,
                 Message = message ?? string.Empty,
                 Flag = flag ?? 0,
@@ -291,7 +286,7 @@ public class PetitionRepository
             {
                 Seq = petitionSeq,
                 MemoSeq = 0, // Will be calculated by SP
-                CharName = gm.CharName,
+                gm.CharName,
                 Content = content,
                 Time = DateTime.UtcNow
             };
@@ -338,7 +333,7 @@ public class PetitionRepository
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to get active petitions for world {WorldId}", worldId);
-            return Enumerable.Empty<Petition>();
+            return [];
         }
     }
 
@@ -372,5 +367,48 @@ public class PetitionRepository
 
         // Load Lineage2Info
         // TODO: Implement L2Info loading when needed
+    }
+
+
+    public async Task<int> GetCurrentQuotaAsync(int accountUid, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException("Login packet is incoming only");
+    }
+
+    public async Task ResetQuotaAsync(int accountUid, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException("Login packet is incoming only");
+    }
+
+    public async Task ResetAllQuotasAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException("Login packet is incoming only");
+    }
+
+    public async Task<PetitionErrorCode> UpdateQuotaAsync(
+    int accountUid,
+    int delta,
+    CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var parameters = new
+            {
+                AccountUid = accountUid,
+                Delta = delta
+            };
+
+            await _dbContext.ExecuteStoredProcAsync(
+                "up_Server_UpdateQuota",
+                parameters,
+                cancellationToken);
+
+            return PetitionErrorCode.Success;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to update quota for account {AccountUid}", accountUid);
+            return PetitionErrorCode.DatabaseFail;
+        }
     }
 }

@@ -10,7 +10,7 @@ public static class ConfigurationManager
             GmServicePort = GetAppSetting("GmServicePort", 3109),
             WorldServicePort = GetAppSetting("WorldServicePort", 3107),
             NoticeServicePort = GetAppSetting("NoticeServicePort", 3121),
-            NoticeServiceAllowIpList = GetAppSetting("NoticeServiceAllowIpList", "192.168.0.2"),
+            NoticeServiceAllowIpList = GetAppSetting("NoticeServiceAllowIpList", "192.168.0.2").Split(',', StringSplitOptions.RemoveEmptyEntries),
             AuthIp = GetAppSetting("AuthIp", "192.168.0.2"),
             AuthPort = GetAppSetting("AuthPort", 2108),
             AuthConnCount = GetAppSetting("AuthConnCount", 3),

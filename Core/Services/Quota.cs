@@ -3,23 +3,24 @@ namespace PetitionD.Core.Services;
 
 public static class Quota
 {
-    private static readonly Dictionary<int, int> _accountQuotas = new();
+    private static readonly Dictionary<int, int> _quotas = [];
+    private static readonly object _lock = new();
 
     public static int GetCurrentQuota(int accountUid)
     {
-        lock (_accountQuotas)
+        lock (_lock)
         {
-            return _accountQuotas.TryGetValue(accountUid, out var quota) ? quota : 0;
+            return _quotas.TryGetValue(accountUid, out var quota) ? quota : 0;
         }
     }
 
     public static void UpdateQuota(int accountUid, int delta)
     {
-        lock (_accountQuotas)
+        lock (_lock)
         {
-            if (!_accountQuotas.ContainsKey(accountUid))
-                _accountQuotas[accountUid] = 0;
-            _accountQuotas[accountUid] += delta;
+            if (!_quotas.ContainsKey(accountUid))
+                _quotas[accountUid] = 0;
+            _quotas[accountUid] += delta;
         }
     }
 }

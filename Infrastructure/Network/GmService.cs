@@ -9,31 +9,21 @@ using PetitionD.Infrastructure.Network.Packets;
 using PetitionD.Infrastructure.Network.Sessions;
 using System.Net.Sockets;
 
-public class GmService : NetworkBase
+public class GmService(
+    int port,
+    ISessionManager sessionManager,
+    ILogger<GmService> logger,
+    IAuthService authService,
+    ILoggerFactory loggerFactory,
+    AppSettings settings,
+    GmPacketFactory packetFactory) : NetworkBase(port)
 {
-    private readonly ISessionManager _sessionManager;
-    private readonly ILogger<GmService> _logger;
-    private readonly IAuthService _authService;
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly AppSettings _settings;
-    private readonly GmPacketFactory _packetFactory;
-
-    public GmService(
-        int port,
-        ISessionManager sessionManager,
-        ILogger<GmService> logger,
-        IAuthService authService,
-        ILoggerFactory loggerFactory,
-        AppSettings settings,
-        GmPacketFactory packetFactory) : base(port)
-    {
-        _sessionManager = sessionManager;
-        _logger = logger;
-        _authService = authService;
-        _loggerFactory = loggerFactory;
-        _settings = settings;
-        _packetFactory = packetFactory;
-    }
+    private readonly ISessionManager _sessionManager = sessionManager;
+    private readonly ILogger<GmService> _logger = logger;
+    private readonly IAuthService _authService = authService;
+    private readonly ILoggerFactory _loggerFactory = loggerFactory;
+    private readonly AppSettings _settings = settings;
+    private readonly GmPacketFactory _packetFactory = packetFactory;
 
     protected override void OnSocketAccepted(ListenerSocket listener, Socket socket)
     {

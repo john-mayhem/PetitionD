@@ -3,23 +3,15 @@ using System.Data;
 
 namespace PetitionD.Infrastructure.Database;
 
-public class DbConnectionPool : IAsyncDisposable
+public class DbConnectionPool(
+    ISqlConnectionFactory connectionFactory,
+    int maxSize) : IAsyncDisposable
 {
-    private readonly ISqlConnectionFactory _connectionFactory;
-    private readonly ConcurrentBag<IDbConnection> _connections;
-    private readonly SemaphoreSlim _poolSemaphore;
-    private readonly int _maxSize;
+    private readonly ISqlConnectionFactory _connectionFactory = connectionFactory;
+    private readonly ConcurrentBag<IDbConnection> _connections = [];
+    private readonly SemaphoreSlim _poolSemaphore = new(maxSize, maxSize);
+    private readonly int _maxSize = maxSize;
     private volatile bool _isDisposed;
-
-    public DbConnectionPool(
-        ISqlConnectionFactory connectionFactory,
-        int maxSize)
-    {
-        _connectionFactory = connectionFactory;
-        _maxSize = maxSize;
-        _connections = new ConcurrentBag<IDbConnection>();
-        _poolSemaphore = new SemaphoreSlim(maxSize, maxSize);
-    }
 
     public async Task<IDbConnection> GetConnectionAsync(
         CancellationToken cancellationToken = default)

@@ -88,8 +88,8 @@ public class UndoCheckOutPacket(
     {
         var notification = new Packer((byte)PacketType.G_NOTIFY_ASSIGN);
         notification.AddInt32(petition.PetitionId);
-        notification.AddString(petition.mAssignedGm.CharName);
-        notification.AddInt32(petition.mAssignedGm.CharUid);
+        notification.AddString(petition.AssignedGm.CharName);
+        notification.AddInt32(petition.AssignedGm.CharUid);
         worldSession.BroadcastToGm(notification.ToArray());
     }
 

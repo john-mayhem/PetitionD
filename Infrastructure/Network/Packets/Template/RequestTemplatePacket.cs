@@ -8,16 +8,14 @@ namespace PetitionD.Infrastructure.Network.Packets.Template;
 public class RequestTemplatePacket(ILogger<RequestTemplatePacket> logger)
     : GmPacketBase(PacketType.G_REQUEST_TEMPLATE)
 {
-    private readonly ILogger<RequestTemplatePacket> _logger = logger;
-
     public override void Handle(GmSession session, Unpacker unpacker)
     {
         try
         {
             var domain = (Template.Domain)unpacker.GetUInt8();
-            var templateList = Template.GetTemplateList(domain == Template.Domain.PUBLIC ? 0 : session.AccountUid);
+            var templateList = Template.Operations.GetTemplateList(
+                domain == Template.Domain.Public ? 0 : session.AccountUid);
 
-            // Send each template
             foreach (var template in templateList)
             {
                 var templatePacker = new Packer((byte)PacketType.G_TEMPLATE_LIST);
@@ -26,7 +24,6 @@ public class RequestTemplatePacket(ILogger<RequestTemplatePacket> logger)
                 session.Send(templatePacker.ToArray());
             }
 
-            // Send end marker
             var endPacker = new Packer((byte)PacketType.G_TEMPLATE_LIST_END);
             endPacker.AddUInt8((byte)domain);
             endPacker.AddInt32(templateList.Count);
@@ -34,7 +31,7 @@ public class RequestTemplatePacket(ILogger<RequestTemplatePacket> logger)
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error handling template request");
+            logger.LogError(ex, "Error handling template request");
         }
     }
 

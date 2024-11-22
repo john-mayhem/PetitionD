@@ -4,18 +4,12 @@ using System.Transactions;
 
 namespace PetitionD.Infrastructure.Database.Repositories;
 
-public class TemplateRepository
+public class TemplateRepository(
+    DbContext dbContext,
+    ILogger<TemplateRepository> logger)
 {
-    private readonly DbContext _dbContext;
-    private readonly ILogger<TemplateRepository> _logger;
-
-    public TemplateRepository(
-        DbContext dbContext,
-        ILogger<TemplateRepository> logger)
-    {
-        _dbContext = dbContext;
-        _logger = logger;
-    }
+    private readonly DbContext _dbContext = dbContext;
+    private readonly ILogger<TemplateRepository> _logger = logger;
 
     public async Task<IEnumerable<Template>> GetTemplatesForGmAsync(
         int gmAccountUid,
@@ -68,12 +62,12 @@ public class TemplateRepository
             {
                 GmAccountUid = gmAccountUid,
                 GmAccount = gmAccount,
-                Code = template.Code,
-                Name = template.Name,
+                template.Code,
+                template.Name,
                 Type = (byte)template.Type,
-                Content = template.Content,
-                Category = template.Category,
-                SortOrder = template.SortOrder
+                template.Content,
+                template.Category,
+                template.SortOrder
             };
 
             var result = await _dbContext.ExecuteStoredProcAsync(

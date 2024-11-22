@@ -21,8 +21,7 @@ public class WorldSession : BaseSession
     public byte[]? OneTimeKey { get; private set; }
     public DateTime LastOnlineCheckTime { get; internal set; }
 
-    private readonly ConcurrentDictionary<int, GmSession> _gmSessions = new();
-
+    public readonly ConcurrentDictionary<int, GmSession> _gmSessions = new();
     public WorldSession(
         ILogger<WorldSession> logger,
         PetitionList petitionList,

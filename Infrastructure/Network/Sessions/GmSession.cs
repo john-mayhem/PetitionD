@@ -182,4 +182,45 @@ public class GmSession : BaseSession
             return PetitionErrorCode.Success;
         }
     }
+
+    public void ClearCharacter(int worldId)
+    {
+        lock (_characterList)
+        {
+            _characterList.RemoveAll(c => c.WorldId == worldId);
+        }
+    }
+
+    public void AddCharacter(GmCharacter character)
+    {
+        lock (_characterList)
+        {
+            _characterList.Add(character);
+        }
+    }
+
+    public void SetCharacter(int worldId, GmCharacter character)
+    {
+        lock (_characterList)
+        {
+            var index = _characterList.FindIndex(c => c.WorldId == worldId && c.CharUid == character.CharUid);
+            if (index != -1)
+                _characterList[index] = character;
+            else
+                _characterList.Add(character);
+        }
+    }
+
+    public int GetTryLoginCharUid(int worldId)
+    {
+        lock (_tryLoginList)
+        {
+            if (_tryLoginList.TryGetValue(worldId, out var charUid))
+            {
+                _tryLoginList.Remove(worldId);
+                return charUid;
+            }
+            return 0;
+        }
+    }
 }

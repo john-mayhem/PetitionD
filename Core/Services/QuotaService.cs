@@ -5,20 +5,14 @@ using PetitionD.Configuration;
 
 namespace PetitionD.Core.Services;
 
-public class QuotaService
+public class QuotaService(
+    ILogger<QuotaService> logger,
+    PetitionRepository petitionRepository)
 {
     private readonly ConcurrentDictionary<int, int> _accountQuotas = new();
-    private readonly ILogger<QuotaService> _logger;
-    private readonly PetitionRepository _petitionRepository;
+    private readonly ILogger<QuotaService> _logger = logger;
+    private readonly PetitionRepository _petitionRepository = petitionRepository;
     private readonly SemaphoreSlim _syncLock = new(1, 1);
-
-    public QuotaService(
-        ILogger<QuotaService> logger,
-        PetitionRepository petitionRepository)
-    {
-        _logger = logger;
-        _petitionRepository = petitionRepository;
-    }
 
     public async Task<(bool IsValid, int CurrentQuota)> ValidateQuotaAsync(
         int accountUid,
@@ -237,5 +231,8 @@ public class QuotaService
         }
     }
 
-    public bool IsQuotaEnabled() => Config.EnableQuota;
+    public bool IsQuotaEnabled()
+    {
+        return Config.EnableQuota;
+    }
 }

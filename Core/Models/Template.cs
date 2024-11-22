@@ -24,6 +24,50 @@ public class Template
         Personal
     }
 
+    public static class Operations
+    {
+        public static int Delete(int accountUid, int code)
+        {
+            // Implementation
+            return code;
+        }
+
+        public static PetitionErrorCode Download(
+            int gmAccountUid,
+            string gmAccount,
+            int code,
+            out int resultCode)
+        {
+            resultCode = code;
+            // Implementation
+            return PetitionErrorCode.Success;
+        }
+
+        public static PetitionErrorCode Update(
+            int gmAccountUid,
+            string gmAccount,
+            int code,
+            string name,
+            Type type,
+            string content,
+            int category,
+            out int resultCode)
+        {
+            resultCode = code;
+            // Implementation
+            return PetitionErrorCode.Success;
+        }
+
+        public static PetitionErrorCode UpdateOrder(
+            int gmAccountUid,
+            int code,
+            int offset)
+        {
+            // Implementation
+            return PetitionErrorCode.Success;
+        }
+    }
+
     public void Serialize(NC.ToolNet.Net.Packer packer)
     {
         packer.AddInt32(Code);
@@ -32,5 +76,37 @@ public class Template
         packer.AddString(Content);
         packer.AddInt32(Category);
         packer.AddInt32(SortOrder);
+    }
+
+    public static IEnumerable<Template> GetTemplateList(int gmAccountUid)
+    {
+        // Implementation placeholder
+        return [];
+    }
+
+    public static PetitionErrorCode Delete(int gmAccountUid, int code)
+    {
+        // Implementation placeholder
+        return PetitionErrorCode.Success;
+    }
+
+    public static PetitionErrorCode Download(
+        int gmAccountUid,
+        string gmAccount,
+        int code,
+        out int resultCode)
+    {
+        resultCode = code;
+        // Implementation placeholder
+        return PetitionErrorCode.Success;
+    }
+
+    public static PetitionErrorCode UpdateOrder(
+        int gmAccountUid,
+        int code,
+        int offset)
+    {
+        // Implementation placeholder
+        return PetitionErrorCode.Success;
     }
 }

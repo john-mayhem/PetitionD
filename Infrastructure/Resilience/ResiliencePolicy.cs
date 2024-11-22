@@ -2,21 +2,14 @@
 
 namespace PetitionD.Infrastructure.Resilience;
 
-public class ResiliencePolicy
+public class ResiliencePolicy(
+    ILogger<ResiliencePolicy> logger,
+    CircuitBreaker circuitBreaker,
+    RetryPolicy retryPolicy)
 {
-    private readonly CircuitBreaker _circuitBreaker;
-    private readonly RetryPolicy _retryPolicy;
-    private readonly ILogger<ResiliencePolicy> _logger;
-
-    public ResiliencePolicy(
-        ILogger<ResiliencePolicy> logger,
-        CircuitBreaker circuitBreaker,
-        RetryPolicy retryPolicy)
-    {
-        _logger = logger;
-        _circuitBreaker = circuitBreaker;
-        _retryPolicy = retryPolicy;
-    }
+    private readonly CircuitBreaker _circuitBreaker = circuitBreaker;
+    private readonly RetryPolicy _retryPolicy = retryPolicy;
+    private readonly ILogger<ResiliencePolicy> _logger = logger;
 
     public async Task<T> ExecuteAsync<T>(
         Func<CancellationToken, Task<T>> action,

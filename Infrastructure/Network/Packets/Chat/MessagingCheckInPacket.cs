@@ -8,18 +8,12 @@ using PetitionD.Core.Models;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Infrastructure.Network.Sessions;
 
-public class MessagingCheckInPacket : GmPacketBase
+public class MessagingCheckInPacket(
+    ILogger<MessagingCheckInPacket> logger,
+    PetitionList petitionList) : GmPacketBase(PacketType.G_MESSAGING_CHECK_IN)
 {
-    private readonly ILogger<MessagingCheckInPacket> _logger;
-    private readonly PetitionList _petitionList;
-
-    public MessagingCheckInPacket(
-        ILogger<MessagingCheckInPacket> logger,
-        PetitionList petitionList) : base(PacketType.G_MESSAGING_CHECK_IN)
-    {
-        _logger = logger;
-        _petitionList = petitionList;
-    }
+    private readonly ILogger<MessagingCheckInPacket> _logger = logger;
+    private readonly PetitionList _petitionList = petitionList;
 
     public override void Handle(GmSession session, Unpacker unpacker)
     {

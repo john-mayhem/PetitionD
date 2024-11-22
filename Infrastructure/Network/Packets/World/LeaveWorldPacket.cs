@@ -7,14 +7,9 @@ using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Infrastructure.Network.Sessions;
 
-public class LeaveWorldPacket : GmPacketBase
+public class LeaveWorldPacket(ILogger<LeaveWorldPacket> logger) : GmPacketBase(PacketType.G_LEAVE_WORLD)
 {
-    private readonly ILogger<LeaveWorldPacket> _logger;
-
-    public LeaveWorldPacket(ILogger<LeaveWorldPacket> logger) : base(PacketType.G_LEAVE_WORLD)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<LeaveWorldPacket> _logger = logger;
 
     public override void Handle(GmSession session, Unpacker unpacker)
     {

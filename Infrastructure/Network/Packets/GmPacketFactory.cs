@@ -1,4 +1,5 @@
-﻿// File: Infrastructure/Network/Packets/GmPacketFactory.cs
+﻿namespace PetitionD.Infrastructure.Network.Packets;
+// File: Infrastructure/Network/Packets/GmPacketFactory.cs
 using NC.PetitionLib;
 using Microsoft.Extensions.DependencyInjection;
 using PetitionD.Infrastructure.Network.Packets.Base;
@@ -8,7 +9,6 @@ using PetitionD.Infrastructure.Network.Packets.Chat;
 using PetitionD.Infrastructure.Network.Packets.Template;
 using PetitionD.Infrastructure.Network.Packets.PetitionHandlers;
 
-namespace PetitionD.Infrastructure.Network.Packets;
 
 public class GmPacketFactory
 {
@@ -29,7 +29,7 @@ public class GmPacketFactory
         RegisterPacket<LoginPacket>(PacketType.G_LOGIN);
 
         // World
-        RegisterPacket<RequestWorldListPacket>(PacketType.G_REQUEST_WORLD_LIST);
+        //RegisterPacket<RequestWorldListPacket>(PacketType.G_REQUEST_WORLD_LIST);
         RegisterPacket<RequestWorldCharPacket>(PacketType.G_REQUEST_WORLD_CHAR);
         RegisterPacket<EnterWorldPacket>(PacketType.G_ENTER_WORLD);
         RegisterPacket<LeaveWorldPacket>(PacketType.G_LEAVE_WORLD);

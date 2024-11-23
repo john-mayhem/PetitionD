@@ -1,10 +1,13 @@
+namespace PetitionD.Infrastructure.Network.Packets.PetitionHandlers;
+
 using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Core.Models;
+using PetitionD.Core.Services;
 
 
-namespace PetitionD.Infrastructure.Network.Packets.PetitionHandlers;
+
 
 public class CheckOutPetitionPacket(
     ILogger<CheckOutPetitionPacket> logger,

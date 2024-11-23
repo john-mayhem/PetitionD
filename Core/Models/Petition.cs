@@ -208,15 +208,14 @@ public class Petition
 
     public PetitionErrorCode ModifyCategory(GmCharacter gmChar, int category)
     {
-        if (!Category.IsValid(category))
-            return PetitionErrorCode.UnexpectedCategory;
+        //if (!Category.IsValid(category))   Error(active)  CS1061  'int' does not contain a definition for 'IsValid' and no accessible extension method 'IsValid' accepting a first argument of type 'int' could be found(are you missing a using directive or an assembly reference ?)	PetitionD D:\Dev\PetitionD\Core\Models\Petition.cs    211
+
+        //    return PetitionErrorCode.UnexpectedCategory;
 
         if (gmChar.WorldId != WorldId || gmChar.CharUid != CheckOutGm.CharUid)
             return PetitionErrorCode.NoRightToAccess;
-
         if (State != State.CheckOut && State != State.EndChat)
             return PetitionErrorCode.InvalidState;
-
         Category = category;
         return PetitionErrorCode.Success;
     }

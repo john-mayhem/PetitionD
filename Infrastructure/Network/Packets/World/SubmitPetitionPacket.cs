@@ -48,12 +48,13 @@ public class SubmitPetitionPacket(
                 content,
                 forcedGm,
                 info,
-                out Packets.Petition newPetition);
+                out _); // out Packets.Petition newPetition); throwing errors TODO fix
 
             if (result == PetitionErrorCode.Success)
             {
-                SendSuccessResponse(worldSession, requestId, newPetition);
-                NotifyGms(worldSession, newPetition);
+                // SendSuccessResponse(worldSession, requestId, newPetition);
+                //NotifyGms(worldSession, newPetition);
+                throw new NotImplementedException();
             }
             else
             {

@@ -1,3 +1,5 @@
+namespace PetitionD.Infrastructure.Network.Packets.Template;
+
 using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Packets.Base;
@@ -9,7 +11,6 @@ using System.Threading.Tasks;
 using PetitionD.Core.Models;
 
 
-namespace PetitionD.Infrastructure.Network.Packets.Template;
 public class DownloadTemplatePacket(ILogger<DownloadTemplatePacket> logger)
     : GmPacketBase(PacketType.G_DOWNLOAD_TEMPLATE)
 {
@@ -18,7 +19,7 @@ public class DownloadTemplatePacket(ILogger<DownloadTemplatePacket> logger)
         try
         {
             var code = unpacker.GetInt32();
-            var result = Template.Operations.Download(
+            var result = Template.Download(
                 session.AccountUid,
                 session.Account,
                 code,

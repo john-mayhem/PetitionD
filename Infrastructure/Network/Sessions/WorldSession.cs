@@ -75,20 +75,26 @@ public class WorldSession : BaseSession
 
     public int GetGmCount() => _gmSessions.Count;
 
-    public void BroadcastToGm(byte[] data)
+    public int BroadcastToGm(byte[] data)
     {
+        int gmCount = 0;
+
         foreach (var session in _gmSessions.Values)
         {
             try
             {
                 session.Send(data);
+                gmCount++; // Increment the count for each successful send
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to broadcast to GM {SessionId}", session.Id);
             }
         }
+
+        return gmCount; // Return the total number of GMs notified
     }
+
 
     public void BroadcastToGmExcept(byte[] data, GmSession except)
     {

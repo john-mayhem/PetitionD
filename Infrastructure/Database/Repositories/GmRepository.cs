@@ -1,10 +1,11 @@
-﻿using Microsoft.Data.SqlClient;
+﻿namespace PetitionD.Infrastructure.Database.Repositories;
+
+using Microsoft.Data.SqlClient;
 using NC.PetitionLib;
 using PetitionD.Core.Models;
 using System.Data;
 using System.Transactions;
 
-namespace PetitionD.Infrastructure.Database.Repositories;
 
 public class GmRepository(
     DbContext dbContext,
@@ -88,13 +89,13 @@ public class GmRepository(
                 WorldId = worldId
             };
 
-            return await _dbContext.ExecuteStoredProcAsync<List<GmCharacter>>(
+            return await _dbContext.ExecuteStoredProcAsync(
                 "up_Server_GetGmCharList",
                 parameters,
-                            async reader =>
+                async (reader, token) => // Include both reader and token
                 {
                     var characters = new List<GmCharacter>();
-                    while (await reader.ReadAsync(cancellationToken))
+                    while (await reader.ReadAsync(token))
                     {
                         characters.Add(new GmCharacter
                         {
@@ -113,7 +114,7 @@ public class GmRepository(
         {
             _logger.LogError(ex, "Failed to get GM characters for account {AccountUid} in world {WorldId}",
                 accountUid, worldId);
-            return [];
+            return new List<GmCharacter>(); // Use `new List<GmCharacter>()` instead of `[]`
         }
     }
 }

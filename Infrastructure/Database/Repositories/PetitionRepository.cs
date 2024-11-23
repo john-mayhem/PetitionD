@@ -17,6 +17,7 @@ public class PetitionRepository(
 
     public async Task<(PetitionErrorCode ErrorCode, string PetitionSeq)> CreatePetitionAsync(
         int worldId,
+        byte category,
         Petition petition,
         CancellationToken cancellationToken = default)
     {

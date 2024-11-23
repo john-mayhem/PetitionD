@@ -1,10 +1,9 @@
-﻿using NC.PetitionLib;
-using PetitionD.Core.Models;
+﻿namespace PetitionD.Services;
+using NC.PetitionLib;
+using PetitionD.Core.Models;  // Ensure this includes PetitionCategory definition.
 using PetitionD.Core.Services;
 using PetitionD.Infrastructure.Database.Repositories;
 using System.Transactions;
-
-namespace PetitionD.Services;
 
 public class PetitionService(
     PetitionRepository petitionRepository,
@@ -18,7 +17,7 @@ public class PetitionService(
     private readonly PetitionList _petitionList = petitionList;
     private readonly SemaphoreSlim _syncLock = new(1, 1);
 
-    public async Task<(PetitionErrorCode ErrorCode, Petition? Petition)> SubmitPetitionAsync(
+    public async Task<(PetitionErrorCode ErrorCode, string? PetitionSeq)> SubmitPetitionAsync(
         int worldId,
         byte category,
         GameCharacter user,
@@ -40,20 +39,37 @@ public class PetitionService(
             {
                 var (isValid, currentQuota) = await _quotaService.ValidateQuotaAsync(
                     user.AccountUid, cancellationToken);
-
                 if (!isValid)
                     return (PetitionErrorCode.ExceedQuota, null);
             }
 
-            using var scope = new TransactionScope(
-                TransactionScopeAsyncFlowOption.Enabled);
+            using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+            // Construct the Petition object.
+            var petition = new Petition
+            {
+                PetitionSeq = Guid.NewGuid().ToString(), // Generate a unique PetitionSeq if necessary.
+                Category = category,
+                WorldId = worldId,
+                User = user,
+                Content = content,
+                ForcedGm = forcedGm,
+                Info = info,
+                QuotaAtSubmit = 0, // or appropriate value for QuotaAtSubmit based on your logic.
+                SubmitTime = DateTime.UtcNow // or the actual submit time.
+            };
 
             // Create petition
             var result = await _petitionRepository.CreatePetitionAsync(
-                worldId, category, user, content, forcedGm, info, cancellationToken);
+                worldId, 
+                category,
+                petition,
+                cancellationToken);
 
             if (result.ErrorCode != PetitionErrorCode.Success)
+            {
                 return (result.ErrorCode, null);
+            }
 
             // Update quota if not forced GM petition
             if (forcedGm.CharUid == 0)
@@ -62,21 +78,22 @@ public class PetitionService(
             }
 
             // Load the created petition
-            var petition = await _petitionRepository.GetPetitionByIdAsync(
-                result.PetitionId, cancellationToken);
+            var petitionSeq = result.PetitionSeq;
+            var createdPetition = await _petitionRepository.GetPetitionByIdAsync(
+                int.Parse(petitionSeq), cancellationToken);
 
-            if (petition == null)
+            if (createdPetition == null)
             {
-                _logger.LogError("Failed to load newly created petition {PetitionId}",
-                    result.PetitionId);
+                _logger.LogError("Failed to load newly created petition with PetitionSeq {PetitionSeq}",
+                    petitionSeq);
                 return (PetitionErrorCode.DatabaseFail, null);
             }
 
             // Add to in-memory list
-            _petitionList.AddPetition(petition);
+            _petitionList.AddPetition(createdPetition);
 
             scope.Complete();
-            return (PetitionErrorCode.Success, petition);
+            return (PetitionErrorCode.Success, petitionSeq);
         }
         catch (Exception ex)
         {

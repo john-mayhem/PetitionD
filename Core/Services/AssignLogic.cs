@@ -208,4 +208,9 @@ public static class AssignLogic
             return selectedGm.ToGameCharacter();
         }
     }
+
+    internal static IEnumerable<Petition?> Assign(int worldId)
+    {
+        throw new NotImplementedException();
+    }
 }

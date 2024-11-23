@@ -77,7 +77,7 @@ static class Program
         ));
 
 
-        services.AddSingleton<WorldService>();  // We'll create this next
+        services.AddSingleton<WorldService>(); 
         services.AddSingleton<DbContext>();
         services.AddSingleton<PetitionRepository>();
         services.AddSingleton<TemplateRepository>();

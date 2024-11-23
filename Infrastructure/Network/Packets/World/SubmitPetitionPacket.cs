@@ -3,12 +3,13 @@ using NC.ToolNet.Net;
 using PetitionD.Core.Models;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Configuration;
+using PetitionD.Core.Services;
 
 namespace PetitionD.Infrastructure.Network.Packets.World;
 
 public class SubmitPetitionPacket(
     ILogger<SubmitPetitionPacket> logger,
-    PetitionList petitionList) : WorldPacketBase(PacketType.W_SUBMIT_PETITION6)
+    PetitionList petitionList) : WorldPacketBase(PacketType.W_SUBMIT_PETITION6, logger)
 {
     public override void Handle(WorldSession worldSession, Unpacker unpacker)
     {

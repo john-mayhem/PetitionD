@@ -1,9 +1,10 @@
+// File: Infrastructure/Network/Packets/Template/RequestTemplatePacket.cs
+namespace PetitionD.Infrastructure.Network.Packets.Template;
+
 using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Core.Models;
-
-namespace PetitionD.Infrastructure.Network.Packets.Template;
 
 public class RequestTemplatePacket(ILogger<RequestTemplatePacket> logger)
     : GmPacketBase(PacketType.G_REQUEST_TEMPLATE)
@@ -13,7 +14,7 @@ public class RequestTemplatePacket(ILogger<RequestTemplatePacket> logger)
         try
         {
             var domain = (Template.Domain)unpacker.GetUInt8();
-            var templateList = Template.Operations.GetTemplateList(
+            var templateList = Template.GetTemplateList(
                 domain == Template.Domain.Public ? 0 : session.AccountUid);
 
             foreach (var template in templateList)
@@ -26,7 +27,7 @@ public class RequestTemplatePacket(ILogger<RequestTemplatePacket> logger)
 
             var endPacker = new Packer((byte)PacketType.G_TEMPLATE_LIST_END);
             endPacker.AddUInt8((byte)domain);
-            endPacker.AddInt32(templateList.Count);
+            endPacker.AddInt32(templateList.Count());
             session.Send(endPacker.ToArray());
         }
         catch (Exception ex)

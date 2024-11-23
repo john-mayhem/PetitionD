@@ -88,10 +88,10 @@ public class GmRepository(
                 WorldId = worldId
             };
 
-            return await _dbContext.ExecuteStoredProcAsync(
+            return await _dbContext.ExecuteStoredProcAsync<List<GmCharacter>>(
                 "up_Server_GetGmCharList",
                 parameters,
-                async reader =>
+                            async reader =>
                 {
                     var characters = new List<GmCharacter>();
                     while (await reader.ReadAsync(cancellationToken))

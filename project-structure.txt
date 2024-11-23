@@ -86,11 +86,13 @@ PetitionD/
 │  │  ├─ NetworkBase.cs
 │  │  ├─ NetworkService.cs
 │  │  ├─ NoticeService.cs
+│  │  ├─ PacketFactory.cs
 │  │  ├─ Packets/
 │  │  │  ├─ Auth/
 │  │  │  │  ├─ LoginPacket.cs
 │  │  │  ├─ Base/
 │  │  │  │  ├─ GmPacketBase.cs
+│  │  │  │  ├─ PacketBase.cs
 │  │  │  │  ├─ WorldPacketBase.cs
 │  │  │  ├─ Chat/
 │  │  │  │  ├─ ChattingCheckInPacket.cs
@@ -120,6 +122,7 @@ PetitionD/
 │  │  │  │  ├─ RequestWorldCharPacket.cs
 │  │  │  │  ├─ RequestWorldListPacket.cs
 │  │  │  │  ├─ SubmitPetitionPacket.cs
+│  │  │  ├─ WorldPacketFactory.cs
 │  │  ├─ SessionManager.cs
 │  │  ├─ Sessions/
 │  │  │  ├─ BaseSession.cs

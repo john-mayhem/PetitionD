@@ -9,7 +9,7 @@ namespace PetitionD.Infrastructure.Network.Packets.World;
 
 public class CancelPetitionPacket(
     ILogger<CancelPetitionPacket> logger,
-    PetitionList petitionList) : WorldPacketBase(PacketType.W_CANCEL_PETITION3)  // Changed base class
+    PetitionList petitionList) : WorldPacketBase(PacketType.W_CANCEL_PETITION3, logger)
 {
     public override void Handle(WorldSession worldSession, Unpacker unpacker)
     {

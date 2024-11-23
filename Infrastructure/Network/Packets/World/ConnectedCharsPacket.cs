@@ -7,7 +7,7 @@ using PetitionD.Core.Models;
 namespace PetitionD.Infrastructure.Network.Packets.World;
 
 public class ConnectedCharsPacket(
-    ILogger<ConnectedCharsPacket> logger) : WorldPacketBase(PacketType.W_CONNECTED_CHARS2)
+    ILogger<ConnectedCharsPacket> logger) : WorldPacketBase(PacketType.W_CONNECTED_CHARS2, logger)
 {
     public override void Handle(WorldSession worldSession, Unpacker unpacker)
     {

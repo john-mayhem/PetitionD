@@ -9,7 +9,7 @@ namespace PetitionD.Infrastructure.Network.Packets.World
     public class RequestWorldListPacket(
         ILogger<RequestWorldListPacket> logger,
         WorldSessionManager worldSessionManager,
-        PetitionList petitionList) : WorldPacketBase(PacketType.G_REQUEST_WORLD_LIST)
+        PetitionList petitionList) : WorldPacketBase(PacketType.G_REQUEST_WORLD_LIST, logger)
     {
         public override void Handle(WorldSession session, Unpacker unpacker)
         {

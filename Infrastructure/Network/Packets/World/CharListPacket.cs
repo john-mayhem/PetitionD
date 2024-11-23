@@ -8,7 +8,7 @@ namespace PetitionD.Infrastructure.Network.Packets.World;
 
 public class CharListPacket(
     ILogger<CharListPacket> logger,
-    ISessionManager sessionManager) : WorldPacketBase(PacketType.W_CHAR_LIST2)
+    ISessionManager sessionManager) : WorldPacketBase(PacketType.W_CHAR_LIST2, logger)
 {
     private readonly ISessionManager _sessionManager = sessionManager;
 

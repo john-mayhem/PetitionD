@@ -1,12 +1,19 @@
+// File: Infrastructure/Network/Packets/Template/DeleteTemplatePacket.cs
+using Microsoft.Extensions.Logging;
+using NC.PetitionLib;
+using NC.ToolNet.Net;
+using PetitionD.Core.Models;
+using PetitionD.Infrastructure.Network.Packets.Base;
+using PetitionD.Infrastructure.Network.Sessions;
+
+namespace PetitionD.Infrastructure.Network.Packets.Template;
+
 using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Core.Models;
 
-namespace PetitionD.Infrastructure.Network.Packets.Template;
-
-public class DeleteTemplatePacket(ILogger<DeleteTemplatePacket> logger)
-    : GmPacketBase(PacketType.G_DELETE_TEMPLATE)
+public class DeleteTemplatePacket(ILogger<DeleteTemplatePacket> logger) : GmPacketBase(PacketType.G_DELETE_TEMPLATE)
 {
     public override void Handle(GmSession session, Unpacker unpacker)
     {

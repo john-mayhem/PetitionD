@@ -28,8 +28,6 @@ public class NoticeSession(
                 _logger.LogWarning("Unexpected notice packet type: {PacketType}", packetType);
                 return;
             }
-
-            HandleSubmitNotice(new Unpacker(packet));
         }
         catch (Exception ex)
         {

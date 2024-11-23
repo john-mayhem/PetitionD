@@ -1,7 +1,8 @@
 // File: Core/Models/Petition.cs
 using NC.PetitionLib;
 using PetitionD.Core.Enums;
-
+using PetitionD.Core.Services;
+using PetitionD.Core.Extensions;
 namespace PetitionD.Core.Models;
 
 public class Petition

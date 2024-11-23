@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using PetitionD.Infrastructure.Network.Packets;
 using NC.ToolNet.Net;
 using PetitionD.Core.Models;
+using PetitionD.Core.Services;
 
 namespace PetitionD.Infrastructure.Network.Sessions;
 

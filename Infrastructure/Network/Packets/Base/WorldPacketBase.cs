@@ -1,13 +1,15 @@
 // File: Infrastructure/Network/Packets/Base/WorldPacketBase.cs
-namespace PetitionD.Infrastructure.Network.Packets.Base;
-
 using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Infrastructure.Network.Sessions;
+using Microsoft.Extensions.Logging;
 
-
-public abstract class WorldPacketBase : PacketBase
+namespace PetitionD.Infrastructure.Network.Packets.Base
 {
-    protected WorldPacketBase(PacketType packetType) : base(packetType) { }
-    public abstract void Handle(WorldSession session, Unpacker unpacker);
+    public abstract class WorldPacketBase(PacketType packetType, ILogger logger) : PacketBase(packetType)
+    {
+        protected readonly ILogger Logger = logger;
+
+        public abstract void Handle(WorldSession session, Unpacker unpacker);
+    }
 }

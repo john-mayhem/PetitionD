@@ -10,11 +10,13 @@ public class SessionManager(ILogger<SessionManager> logger) : ISessionManager
 {
     private readonly ConcurrentDictionary<string, ISession> _sessions = new();
     private readonly ILogger<SessionManager> _logger = logger;
+    public event Action<ISession> SessionCreated;
 
     public void AddSession(ISession session)
     {
         if (_sessions.TryAdd(session.Id, session))
         {
+            SessionCreated?.Invoke(session);
             _logger.LogInformation("Session {Id} added", session.Id);
         }
         else

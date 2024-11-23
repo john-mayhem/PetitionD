@@ -1,13 +1,20 @@
 ﻿// File: Infrastructure/Network/Sessions/BaseSession.cs
+using System.Net;
 using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using NC.ToolNet.Net.Server;
 
 namespace PetitionD.Infrastructure.Network.Sessions;
 
-public abstract class BaseSession(ILogger logger) : ASocket, ISession
+public abstract class BaseSession : ASocket, ISession
 {
-    protected readonly ILogger Logger = logger;  // Store logger as a field
+    protected readonly ILogger Logger;
+
+    protected BaseSession(ILogger logger) : base()
+    {
+        Logger = logger;
+    }
+
     public string Id { get; } = Guid.NewGuid().ToString();
     public bool IsConnected { get; private set; }
 
@@ -62,4 +69,35 @@ public abstract class BaseSession(ILogger logger) : ASocket, ISession
 
     protected virtual void OnSessionStarted() { }
     protected virtual void OnSessionStopped() { }
+
+    protected override void OnReceived(byte[] packet)
+    {
+        try
+        {
+            PacketLogged?.Invoke(packet, false); // Log incoming packet
+            HandlePacket(packet);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error handling received packet");
+        }
+    }
+
+    public override void Send(byte[] data)
+    {
+        try
+        {
+            PacketLogged?.Invoke(data, true); // Log outgoing packet
+            base.Send(data);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error sending packet");
+        }
+    }
+
+    protected abstract void HandlePacket(byte[] packet);
+    public event Action<byte[], bool> PacketLogged;
+    public new EndPoint? RemoteEndPoint => base.RemoteEndPoint;
+
 }

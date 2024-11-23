@@ -12,4 +12,6 @@ public interface ISessionManager
     void BroadcastToAll(byte[] data);
     bool HasSession(string sessionId);
     void RemoveAllSessions();
+
+    event Action<ISession> SessionCreated;
 }

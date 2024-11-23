@@ -35,6 +35,22 @@ public class WorldSession : BaseSession
         GenerateOneTimeKey();
     }
 
+    protected override void HandlePacket(byte[] packet)
+    {
+        try
+        {
+            var packetType = (PacketType)packet[0];
+            _logger.LogDebug("Received World packet: {PacketType}", packetType);
+
+            var unpacker = new Unpacker(packet);
+            OnReceived(packet); // Call the existing OnReceived method
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing world packet");
+        }
+    }
+
     private void GenerateOneTimeKey()
     {
         OneTimeKey = new byte[8];

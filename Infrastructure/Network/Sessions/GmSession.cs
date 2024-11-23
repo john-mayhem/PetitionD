@@ -37,6 +37,36 @@ public class GmSession : BaseSession
         GenerateOneTimeKey();
     }
 
+    protected override void HandlePacket(byte[] packet)
+    {
+        try
+        {
+            var packetType = (PacketType)packet[0];
+            _logger.LogDebug("Received GM packet: {PacketType}", packetType);
+
+            // Pre-login packet validation
+            if (AccountUid == 0 && packetType != PacketType.G_LOGIN && packetType != PacketType.G_SERVER_VER)
+            {
+                _logger.LogWarning("Unauthorized packet received: {PacketType}", packetType);
+                return;
+            }
+
+            var handler = _packetFactory.CreatePacket(packetType);
+            if (handler == null)
+            {
+                _logger.LogWarning("No handler for packet type: {PacketType}", packetType);
+                return;
+            }
+
+            var unpacker = new Unpacker(packet);
+            handler.Handle(this, unpacker);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing GM packet");
+        }
+    }
+
     private void GenerateOneTimeKey()
     {
         OneTimeKey = new byte[8];

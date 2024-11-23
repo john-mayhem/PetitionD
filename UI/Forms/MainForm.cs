@@ -1,5 +1,6 @@
 ﻿// File: UI/Forms/MainForm.cs
 using PetitionD.Configuration;
+using PetitionD.Core.Services;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -13,72 +14,183 @@ public partial class MainForm : Form
     private readonly ToolStripStatusLabel _petitionCountLabel;
     private readonly ToolStripStatusLabel _gmCountLabel;
     private readonly ToolStripStatusLabel _worldCountLabel;
+    private readonly ServerService _serverService;
+    private readonly TabControl _tabControl;
+    private readonly ListView _connectionsListView;
+    private readonly ListView _packetsListView;
     private bool _isRunning;
 
-    public MainForm(AppSettings settings)
+
+    public MainForm(AppSettings settings, ServerService serverService)
     {
         _settings = settings;
+        _serverService = serverService;
         InitializeComponent();
 
         // Set window properties
-        this.Text = "PetitionD Server";
-        this.Size = new System.Drawing.Size(1024, 768);
-        this.BackColor = System.Drawing.Color.Black;
+        this.Text = $"PetitionD Server v{settings.ServerBuildNumber}";
+        this.Size = new Size(1200, 800);
 
-        // Create rich text console
+        // Create tab control
+        _tabControl = new TabControl
+        {
+            Dock = DockStyle.Fill,
+            Font = new Font("Segoe UI", 9F)
+        };
+
+        // Create Console Tab
+        var consoleTab = new TabPage("Console");
         _consoleOutput = new RichTextBox
         {
             Dock = DockStyle.Fill,
-            BackColor = System.Drawing.Color.Black,
-            ForeColor = System.Drawing.Color.FromArgb(50, 255, 50),  // Matrix green
-            Font = new Font("Cascadia Code", 10F),     // Modern programming font
+            BackColor = Color.Black,
+            ForeColor = Color.LightGreen,
+            Font = new Font("Cascadia Code", 10F),
             ReadOnly = true,
             Multiline = true,
-            BorderStyle = BorderStyle.None,
-            ScrollBars = RichTextBoxScrollBars.Vertical,
-            WordWrap = false,
-            Margin = new System.Windows.Forms.Padding(10)
+            WordWrap = false
         };
+        consoleTab.Controls.Add(_consoleOutput);
+
+        // Create Connections Tab
+        var connectionsTab = new TabPage("Connections");
+        _connectionsListView = new ListView
+        {
+            Dock = DockStyle.Fill,
+            View = View.Details,
+            FullRowSelect = true,
+            GridLines = true
+        };
+        _connectionsListView.Columns.AddRange(new[]
+        {
+            new ColumnHeader { Text = "ID", Width = 100 },
+            new ColumnHeader { Text = "Type", Width = 100 },
+            new ColumnHeader { Text = "Remote Endpoint", Width = 150 },
+            new ColumnHeader { Text = "Connected Time", Width = 150 },
+            new ColumnHeader { Text = "Status", Width = 100 }
+        });
+        connectionsTab.Controls.Add(_connectionsListView);
+
+        // Create Packets Tab
+        var packetsTab = new TabPage("Packets");
+        _packetsListView = new ListView
+        {
+            Dock = DockStyle.Fill,
+            View = View.Details,
+            FullRowSelect = true,
+            GridLines = true
+        };
+        _packetsListView.Columns.AddRange(new[]
+        {
+            new ColumnHeader { Text = "Time", Width = 100 },
+            new ColumnHeader { Text = "Direction", Width = 80 },
+            new ColumnHeader { Text = "Session", Width = 100 },
+            new ColumnHeader { Text = "Type", Width = 150 },
+            new ColumnHeader { Text = "Size", Width = 80 },
+            new ColumnHeader { Text = "Data", Width = 300 }
+        });
+        packetsTab.Controls.Add(_packetsListView);
+
+        // Add tabs to control
+        _tabControl.TabPages.AddRange(new[] { consoleTab, connectionsTab, packetsTab });
 
         // Create status strip
-        _statusStrip = new StatusStrip
+        _statusStrip = new StatusStrip();
+        _petitionCountLabel = new ToolStripStatusLabel("Petitions: 0");
+        _gmCountLabel = new ToolStripStatusLabel("GMs: 0");
+        _worldCountLabel = new ToolStripStatusLabel("Worlds: 0");
+        _statusStrip.Items.AddRange(new ToolStripItem[]
         {
-            BackColor = System.Drawing.Color.FromArgb(30, 30, 30),
-            ForeColor = System.Drawing.Color.White
-        };
-
-        _petitionCountLabel = new ToolStripStatusLabel
-        {
-            Text = "Petitions: 0",
-            BorderSides = ToolStripStatusLabelBorderSides.Right,
-            BorderStyle = Border3DStyle.Etched
-        };
-
-        _gmCountLabel = new ToolStripStatusLabel
-        {
-            Text = "GMs Online: 0",
-            BorderSides = ToolStripStatusLabelBorderSides.Right,
-            BorderStyle = Border3DStyle.Etched
-        };
-
-        _worldCountLabel = new ToolStripStatusLabel
-        {
-            Text = "Worlds: 0"
-        };
-
-        _statusStrip.Items.AddRange(
-        [
             _petitionCountLabel,
+            new ToolStripSeparator(),
             _gmCountLabel,
+            new ToolStripSeparator(),
             _worldCountLabel
-        ]);
+        });
 
-        // Add controls
-        Controls.Add(_consoleOutput);
+        // Add controls to form
+        Controls.Add(_tabControl);
         Controls.Add(_statusStrip);
 
-        ShowWelcomeMessage();
+        // Setup context menu for packet list
+        var packetContextMenu = new ContextMenuStrip();
+        packetContextMenu.Items.Add("Copy", null, (s, e) => CopySelectedPacket());
+        packetContextMenu.Items.Add("Clear", null, (s, e) => _packetsListView.Items.Clear());
+        _packetsListView.ContextMenuStrip = packetContextMenu;
+
         StartServer();
+    }
+
+    public void LogPacket(DateTime time, string direction, string session, string type, int size, byte[] data)
+    {
+        if (_packetsListView.InvokeRequired)
+        {
+            _packetsListView.Invoke(() => LogPacket(time, direction, session, type, size, data));
+            return;
+        }
+
+        var item = new ListViewItem(new[]
+        {
+            time.ToString("HH:mm:ss.fff"),
+            direction,
+            session,
+            type,
+            size.ToString(),
+            BitConverter.ToString(data).Replace("-", " ")
+        });
+
+        if (direction == "OUT")
+            item.BackColor = Color.FromArgb(240, 248, 255); // Light blue for outgoing
+        else
+            item.BackColor = Color.FromArgb(255, 240, 245); // Light pink for incoming
+
+        _packetsListView.Items.Insert(0, item);
+
+        // Keep only last 1000 packets
+        if (_packetsListView.Items.Count > 1000)
+            _packetsListView.Items.RemoveAt(_packetsListView.Items.Count - 1);
+    }
+
+    public void UpdateConnection(string id, string type, string endpoint, DateTime connectedTime, string status)
+    {
+        if (_connectionsListView.InvokeRequired)
+        {
+            _connectionsListView.Invoke(() => UpdateConnection(id, type, endpoint, connectedTime, status));
+            return;
+        }
+
+        var existing = _connectionsListView.Items.Cast<ListViewItem>()
+            .FirstOrDefault(x => x.Text == id);
+
+        if (existing != null)
+        {
+            existing.SubItems[4].Text = status;
+            if (status == "Disconnected")
+                existing.BackColor = Color.LightGray;
+        }
+        else
+        {
+            var item = new ListViewItem(new[]
+            {
+                id,
+                type,
+                endpoint,
+                connectedTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                status
+            });
+            _connectionsListView.Items.Add(item);
+        }
+    }
+
+    private void CopySelectedPacket()
+    {
+        if (_packetsListView.SelectedItems.Count > 0)
+        {
+            var item = _packetsListView.SelectedItems[0];
+            var text = string.Join("\t", Enumerable.Range(0, item.SubItems.Count)
+                .Select(i => item.SubItems[i].Text));
+            Clipboard.SetText(text);
+        }
     }
 
     private void ShowWelcomeMessage()
@@ -137,29 +249,34 @@ public partial class MainForm : Form
     {
         try
         {
-            LogMessage("Initializing services...");
+            ShowWelcomeMessage();
+            _serverService.Start();
+
+            // Add status updates
+            var timer = new System.Windows.Forms.Timer
+            {
+                Interval = _settings.ServerStatusRefreshInterval * 1000
+            };
+
+            timer.Tick += (s, e) => UpdateStatus(
+                GetActivePetitionCount(),
+                GetGmCount(),
+                GetWorldCount()
+            );
+            timer.Start();
+
             LogMessage($"GM Service started on port {_settings.GmServicePort}", LogLevel.Information);
-            _isRunning = true;
-
-            // Update status periodically
-            var statusTimer = new System.Windows.Forms.Timer
-            {
-                Interval = 1000
-            };
-
-            statusTimer.Tick += (s, e) =>
-            {
-                UpdateStatus(
-                    GetActivePetitionCount(),
-                    GetGmCount(),
-                    GetWorldCount()
-                );
-            };
-            statusTimer.Start();
+            LogMessage($"World Service started on port {_settings.WorldServicePort}", LogLevel.Information);
+            LogMessage($"Notice Service started on port {_settings.NoticeServicePort}", LogLevel.Information);
         }
         catch (Exception ex)
         {
             LogMessage($"Error starting server: {ex.Message}", LogLevel.Error);
+            MessageBox.Show(
+                $"Failed to start server: {ex.Message}",
+                "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
     }
 

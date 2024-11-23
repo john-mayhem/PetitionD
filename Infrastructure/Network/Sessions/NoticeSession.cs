@@ -1,20 +1,49 @@
-﻿// File: Infrastructure/Network/Sessions/NoticeSession.cs
-using NC.PetitionLib;
+﻿using NC.PetitionLib;
 using NC.ToolNet.Net;
 using PetitionD.Configuration;
 
 namespace PetitionD.Infrastructure.Network.Sessions;
 
-public class NoticeSession(
-    ILogger<NoticeSession> logger,
-    WorldSessionManager worldSessionManager,
-    AppSettings settings) : BaseSession(logger)
+public class NoticeSession : BaseSession
 {
-    private readonly ILogger<NoticeSession> _logger = logger;
-    private readonly WorldSessionManager _worldSessionManager = worldSessionManager;
-    private readonly AppSettings _settings = settings;
+    private readonly ILogger<NoticeSession> _logger;
+    private readonly IWorldSessionManager _worldSessionManager;  // Change to interface
+    private readonly AppSettings _settings;
 
     public string RemoteIp { get; private set; } = string.Empty;
+
+    public NoticeSession(
+        ILogger<NoticeSession> logger,
+        IWorldSessionManager worldSessionManager,  // Change to interface
+        AppSettings settings)
+        : base(logger)
+    {
+        _logger = logger;
+        _worldSessionManager = worldSessionManager;
+        _settings = settings;
+    }
+
+    protected override void HandlePacket(byte[] packet)
+    {
+        try
+        {
+            var packetType = (PacketType)packet[0];
+            _logger.LogDebug("Received Notice packet: {PacketType}", packetType);
+
+            if (packetType != PacketType.N_SUBMIT_NOTICE)
+            {
+                _logger.LogWarning("Unexpected notice packet type: {PacketType}", packetType);
+                return;
+            }
+
+            var unpacker = new Unpacker(packet);
+            HandleSubmitNotice(unpacker);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing notice packet");
+        }
+    }
 
     protected override void OnReceived(byte[] packet)
     {
@@ -28,6 +57,9 @@ public class NoticeSession(
                 _logger.LogWarning("Unexpected notice packet type: {PacketType}", packetType);
                 return;
             }
+
+            var unpacker = new Unpacker(packet);
+            HandleSubmitNotice(unpacker);
         }
         catch (Exception ex)
         {
@@ -100,7 +132,6 @@ public class NoticeSession(
     {
         _logger.LogInformation("Notice Session stopped: {Id} from {RemoteIp}", Id, RemoteIp);
     }
-
 
     public override string ToString() => $"[Notice {RemoteIp}]";
 

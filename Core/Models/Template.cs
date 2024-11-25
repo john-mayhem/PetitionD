@@ -65,7 +65,7 @@ public class Template
         }
     }
 
-    public void Serialize(NC.ToolNet.Net.Packer packer)
+    public void Serialize(NC.ToolNet.Networking.Protocol.Packer packer)
     {
         packer.AddInt32(Code);
         packer.AddString(Name);

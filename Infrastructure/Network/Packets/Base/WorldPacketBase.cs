@@ -1,7 +1,7 @@
 // File: Infrastructure/Network/Packets/Base/WorldPacketBase.cs
 namespace PetitionD.Infrastructure.Network.Packets.Base;
 using NC.PetitionLib;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking.Protocol;
 using PetitionD.Infrastructure.Network.Sessions;
 using Microsoft.Extensions.Logging;
 

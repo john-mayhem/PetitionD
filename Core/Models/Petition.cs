@@ -1,5 +1,6 @@
 // File: Core/Models/Petition.cs
 using NC.PetitionLib;
+using NC.ToolNet.Networking.Protocol;
 using PetitionD.Core.Enums;
 using PetitionD.Core.Services;
 using PetitionD.Core.Extensions;

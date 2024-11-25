@@ -1,6 +1,6 @@
 ﻿// File: Infrastructure/Network/Packets/World/EnterWorldPacket.cs
 using NC.PetitionLib;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking.Protocol;
 using PetitionD.Infrastructure.Network.Packets.Base;
 
 namespace PetitionD.Infrastructure.Network.Packets.World;

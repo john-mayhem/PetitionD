@@ -5,7 +5,7 @@ using PetitionD.Configuration;
 using PetitionD.Core.Interfaces;
 using System.Security.Cryptography;
 using PetitionD.Infrastructure.Network.Packets;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking;
 using PetitionD.Core.Models;
 using PetitionD.Core.Services;
 
@@ -113,7 +113,7 @@ public class GmSession : BaseSession
     {
         _logger.LogInformation("GM Session started: {Id}", Id);
 
-        var packer = new NC.ToolNet.Net.Packer((byte)PacketType.G_SERVER_VER);
+        var packer = new NC.ToolNet.Networking.Protocol.Packer((byte)PacketType.G_SERVER_VER);
         packer.AddInt32(_settings.ServerBuildNumber);
         packer.AddBytes(OneTimeKey ?? []);
         Send(packer.ToArray());

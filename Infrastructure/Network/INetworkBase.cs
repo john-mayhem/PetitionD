@@ -1,6 +1,6 @@
 ﻿// File: Infrastructure/Network/INetworkBase.cs
 using System.Net.Sockets;
-using NC.ToolNet.Net.Server;
+using NC.ToolNet.Networking.Server;
 
 namespace PetitionD.Infrastructure.Network;
 

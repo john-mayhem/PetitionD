@@ -10,6 +10,7 @@ PetitionD/
 │  │  ├─ PetitionState.cs
 │  ├─ Extensions/
 │  │  ├─ CharacterExtensions.cs
+│  │  ├─ PacketExtensions.cs
 │  ├─ Interfaces/
 │  │  ├─ IAuthService.cs
 │  │  ├─ IPetitionService.cs
@@ -30,6 +31,7 @@ PetitionD/
 │  │  ├─ GmStatusService.cs
 │  │  ├─ Quota.cs
 │  │  ├─ QuotaService.cs
+│  │  ├─ ServerService.cs
 │  │  ├─ TemplateService.cs
 ├─ GlobalUsings.cs
 ├─ Infrastructure/
@@ -38,9 +40,9 @@ PetitionD/
 │  │  ├─ DatabaseModule.cs
 │  │  ├─ DbConnectionPool.cs
 │  │  ├─ DbContext.cs
+│  │  ├─ DbRepository.cs
 │  │  ├─ IDbRepository.cs
 │  │  ├─ Repositories/
-│  │  │  ├─ DbRepository.cs
 │  │  │  ├─ GmRepository.cs
 │  │  │  ├─ PetitionRepository.cs
 │  │  │  ├─ TemplateRepository.cs
@@ -73,6 +75,8 @@ PetitionD/
 │  │  ├─ Tables/
 │  │  │  ├─ Indexes.sql
 │  │  │  ├─ Tables.sql
+│  ├─ Logging/
+│  │  ├─ LoggingConfiguration.cs
 │  ├─ Network/
 │  │  ├─ Extensions/
 │  │  │  ├─ WorldSessionExtensions.cs
@@ -81,6 +85,7 @@ PetitionD/
 │  │  ├─ INetworkBase.cs
 │  │  ├─ INetworkService.cs
 │  │  ├─ ISessionManager.cs
+│  │  ├─ IWorldSessionManager.cs
 │  │  ├─ Logging/
 │  │  │  ├─ LoggingManager.cs
 │  │  ├─ NetworkBase.cs

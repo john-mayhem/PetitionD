@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
-using NC.ToolNet.Net.Server;
+using NC.ToolNet.Networking.Server;
 
 namespace PetitionD.Infrastructure.Network.Sessions;
 
@@ -96,8 +96,14 @@ public abstract class BaseSession : ASocket, ISession
         }
     }
 
+    public event Action<byte[], bool> PacketLogged = delegate { };  // Initialize with empty delegate
+
+    protected void OnPacketLogged(byte[] data, bool isOutgoing)
+    {
+        PacketLogged?.Invoke(data, isOutgoing);
+    }
+
     protected abstract void HandlePacket(byte[] packet);
-    public event Action<byte[], bool> PacketLogged;
     public new EndPoint? RemoteEndPoint => base.RemoteEndPoint;
 
 }

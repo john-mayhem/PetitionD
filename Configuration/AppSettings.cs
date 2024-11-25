@@ -15,7 +15,6 @@ public class AppSettings
     public string AuthIp { get; set; } = string.Empty;
     public int AuthPort { get; set; }
     public int AuthConnCount { get; set; }
-    public string LogDirectory { get; set; } = string.Empty;
     public int ServerStatusRefreshInterval { get; set; }
     public string DatabaseConnString { get; set; } = string.Empty;
     public string DatabaseConnName { get; set; } = string.Empty;
@@ -27,4 +26,6 @@ public class AppSettings
     public string[] NoticeServiceAllowIpList { get; set; } = [];
     public bool DumpPacket { get; set; }
     public string RunMode { get; set; } = "Normal";
+    public string LogDirectory { get; set; } = "logs";  // Default to "log" directory
+
 }

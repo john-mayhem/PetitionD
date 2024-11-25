@@ -15,11 +15,12 @@ using PetitionD.Infrastructure.Database.Repositories;
 using PetitionD.Core.Models;
 using PetitionD.Core.Services;
 using PetitionD.Infrastructure.Resilience;
+using PetitionD.Infrastructure.Logging;
 
 static class Program
 {
     [STAThread]
-    static void Main()
+    static async Task Main()  // Change to async Task Main
     {
         Application.SetHighDpiMode(HighDpiMode.SystemAware);
         Application.EnableVisualStyles();
@@ -28,7 +29,7 @@ static class Program
         var services = new ServiceCollection();
         ConfigureServices(services);
 
-        using var serviceProvider = services.BuildServiceProvider();
+        await using var serviceProvider = services.BuildServiceProvider(); // Use await using
         var mainForm = serviceProvider.GetRequiredService<MainForm>();
 
         // Wire up packet logging
@@ -86,11 +87,13 @@ static class Program
         var settings = ConfigurationManager.LoadConfiguration();
         services.AddSingleton(settings);
 
+        // Initialize NC.ToolNet logging first!
+        NC.ToolNet.Networking.Services.LoggingService.Initialize(settings.LogDirectory);
+
         // Configure logging
         services.AddLogging(builder =>
         {
-            builder.AddConsole();
-            builder.SetMinimumLevel(LogLevel.Debug);
+            LoggingConfiguration.ConfigureLogging(builder, settings.LogDirectory);
         });
 
         // Core services
@@ -106,6 +109,7 @@ static class Program
         services.AddSingleton<PacketHandler>();
         services.AddSingleton<IWorldSessionManager, WorldSessionManager>();
         services.AddSingleton<GmPacketFactory>();
+        services.AddSingleton<WorldPacketFactory>();  // Add this if it's not already there
 
         // Service Endpoints
         services.AddSingleton<GmService>();

@@ -1,5 +1,5 @@
 ﻿using NC.PetitionLib;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking.Protocol;
 using PetitionD.Configuration;
 
 namespace PetitionD.Infrastructure.Network.Sessions;

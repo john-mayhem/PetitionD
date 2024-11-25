@@ -12,4 +12,4 @@ global using PetitionD.Core.Interfaces;
 global using PetitionD.Infrastructure.Database;
 global using PetitionD.Services;
 global using NC.PetitionLib;
-global using NC.ToolNet.Net;
+global using NC.ToolNet.Networking.Protocol;

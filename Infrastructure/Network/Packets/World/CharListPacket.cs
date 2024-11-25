@@ -1,6 +1,6 @@
 // File: Infrastructure/Network/Packets/World/CharListPacket.cs
 using NC.PetitionLib;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking.Protocol;
 using PetitionD.Core.Models;
 using PetitionD.Infrastructure.Network.Packets.Base;
 

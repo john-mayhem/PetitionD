@@ -2,7 +2,7 @@
 namespace PetitionD.Infrastructure.Network.Packets.World;
 // File: Infrastructure/Network/Packets/World/RequestWorldListPacket.cs
 using NC.PetitionLib;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking.Protocol;
 using PetitionD.Core.Models;
 using PetitionD.Infrastructure.Network.Packets.Base;
 

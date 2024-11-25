@@ -1,7 +1,7 @@
 // File: Infrastructure/Network/Packets/Template/DeleteTemplatePacket.cs
 using Microsoft.Extensions.Logging;
 using NC.PetitionLib;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking.Protocol;
 using PetitionD.Core.Models;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Infrastructure.Network.Sessions;
@@ -9,7 +9,7 @@ using PetitionD.Infrastructure.Network.Sessions;
 namespace PetitionD.Infrastructure.Network.Packets.Template;
 
 using NC.PetitionLib;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Core.Models;
 

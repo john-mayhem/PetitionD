@@ -3,7 +3,7 @@ namespace PetitionD.Infrastructure.Network;
 
 using global::PetitionD.Configuration;
 using Microsoft.Extensions.Logging;
-using NC.ToolNet.Net.Server;
+using NC.ToolNet.Networking.Server;
 using PetitionD.Configuration;
 using PetitionD.Core.Interfaces;
 using PetitionD.Infrastructure.Network.Packets;

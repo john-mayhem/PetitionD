@@ -1,7 +1,7 @@
 ﻿// File: Infrastructure/Network/Packets/Base/GmPacketBase.cs
 
 using NC.PetitionLib;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking.Protocol;
 using PetitionD.Infrastructure.Network.Sessions;
 
 namespace PetitionD.Infrastructure.Network.Packets.Base;

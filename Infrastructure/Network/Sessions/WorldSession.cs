@@ -1,6 +1,7 @@
 ﻿using NC.PetitionLib;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking;
 using PetitionD.Configuration;
+using PetitionD.Infrastructure.Network.Packets.Base;
 using System.Collections.Concurrent;
 using System.Security.Cryptography;
 
@@ -11,7 +12,7 @@ public class WorldSession : BaseSession
     private readonly ILogger<WorldSession> _logger;
     private readonly PetitionList _petitionList;
     private readonly AppSettings _settings;
-    private readonly GmPacketFactory _packetFactory;
+    private readonly WorldPacketFactory _packetFactory;  // Change this from GmPacketFactory
 
     public int WorldId { get; internal set; }
     public string WorldName { get; internal set; } = "Unknown";
@@ -26,7 +27,8 @@ public class WorldSession : BaseSession
         ILogger<WorldSession> logger,
         PetitionList petitionList,
         AppSettings settings,
-        GmPacketFactory packetFactory) : base(logger)
+        WorldPacketFactory packetFactory)  // Change this parameter type
+        : base(logger)
     {
         _logger = logger;
         _petitionList = petitionList;
@@ -137,6 +139,8 @@ public class WorldSession : BaseSession
             var packetType = (PacketType)packet[0];
             _logger.LogDebug("Received World packet: {PacketType}", packetType);
 
+            OnPacketLogged(packet, false);
+
             var handler = _packetFactory.CreatePacket(packetType);
             if (handler == null)
             {
@@ -145,22 +149,70 @@ public class WorldSession : BaseSession
             }
 
             var unpacker = new Unpacker(packet);
-            // TODO: Implement world packet handling
+            if (handler is WorldPacketBase worldPacketHandler)
+            {
+                // Add packet validation
+                if (ValidatePacket(packet))
+                {
+                    worldPacketHandler.Handle(this, unpacker);
+                }
+                else
+                {
+                    _logger.LogWarning("Invalid packet received: {PacketType}", packetType);
+                }
+            }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error processing world packet");
+            _logger.LogError(ex, "Error processing packet");
         }
     }
 
-    protected override void OnSessionStarted()
+    private bool ValidatePacket(byte[] packet)
     {
-        _logger.LogInformation("World Session started: {Id}", Id);
+        // Minimum packet size is 3 (type + length)
+        if (packet == null || packet.Length < 3)
+            return false;
 
-        var packer = new Packer((byte)PacketType.W_SERVER_VER);
-        packer.AddInt32(_settings.ServerBuildNumber);
-        packer.AddBytes(OneTimeKey ?? []);
-        Send(packer.ToArray());
+        try
+        {
+            // First byte is packet type
+            var packetType = (PacketType)packet[0];
+
+            // For world packets, skip strict size validation
+            // as they have variable length payloads
+            if ((int)packetType >= 100 && (int)packetType < 200)
+            {
+                return true;
+            }
+
+            // For other packets, validate size
+            if (packet.Length >= 3)
+            {
+                var size = BitConverter.ToUInt16(packet, 1);
+                return packet.Length >= size + 3;
+            }
+
+            return false;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Packet validation failed");
+            return false;
+        }
+    }
+
+    public override void Send(byte[] data)
+    {
+        try
+        {
+            OnPacketLogged(data, true); // Use protected method
+            base.Send(data);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send packet");
+        }
     }
 
     protected override void OnSessionStopped()

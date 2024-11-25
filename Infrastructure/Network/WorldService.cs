@@ -1,6 +1,6 @@
 ﻿// File: Infrastructure/Network/WorldService.cs
 using System.Net.Sockets;
-using NC.ToolNet.Net.Server;
+using NC.ToolNet.Networking.Server;
 using PetitionD.Configuration;
 
 namespace PetitionD.Infrastructure.Network;
@@ -12,15 +12,15 @@ public class WorldService : NetworkBase
     private readonly ILoggerFactory _loggerFactory;
     private readonly AppSettings _settings;
     private readonly PetitionList _petitionList;
-    private readonly GmPacketFactory _packetFactory;
+    private readonly WorldPacketFactory _packetFactory;  // Change from GmPacketFactory
 
     public WorldService(
         ILogger<WorldService> logger,
-        IWorldSessionManager sessionManager,  // Changed to interface
+        IWorldSessionManager sessionManager,
         ILoggerFactory loggerFactory,
         AppSettings settings,
         PetitionList petitionList,
-        GmPacketFactory packetFactory)
+        WorldPacketFactory packetFactory)  // Change parameter type
         : base(settings.WorldServicePort)
     {
         _logger = logger;

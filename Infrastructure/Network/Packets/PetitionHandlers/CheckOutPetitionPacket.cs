@@ -1,7 +1,7 @@
 namespace PetitionD.Infrastructure.Network.Packets.PetitionHandlers;
 
 using NC.PetitionLib;
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking.Protocol;
 using PetitionD.Infrastructure.Network.Packets.Base;
 using PetitionD.Core.Models;
 using PetitionD.Core.Services;

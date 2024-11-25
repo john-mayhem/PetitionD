@@ -3,25 +3,38 @@ using NC.PetitionLib;
 using PetitionD.Core.Services;
 using PetitionD.Configuration;
 using PetitionD.Core.Enums;
+using Microsoft.Data.SqlClient;
 
 namespace PetitionD.Core.Models;
 
-public class PetitionList(ILogger<PetitionList> logger)
+public class PetitionList
 {
-    private readonly Dictionary<int, Petition> _activePetitions = [];
-    private readonly Dictionary<int, Dictionary<int, Petition>> _worldPetitions = [];
-    private readonly Dictionary<string, Petition> _completedPetitions = [];
-    private readonly ILogger<PetitionList> _logger = logger;
+    private readonly ILogger<PetitionList> _logger;
+    private readonly Dictionary<int, Petition> _activePetitions = new();
+    private readonly Dictionary<int, Dictionary<int, Petition>> _worldPetitions = new();
+    private readonly Dictionary<string, Petition> _completedPetitions = new();
     private static int _lastPetitionId;
     private static DateTime _lastPetitionSeqDate = DateTime.Today;
     private static int _lastPetitionSeqSerial;
-
     private readonly object _lock = new();
 
-    public static void InitializeSequence()
+    public PetitionList(ILogger<PetitionList> logger)
     {
-        _lastPetitionSeqDate = DateTime.Today;
-        _lastPetitionSeqSerial = 0;
+        _logger = logger;
+    }
+
+    public static bool InitializeSequence()
+    {
+        try
+        {
+            _lastPetitionSeqDate = DateTime.Today;
+            _lastPetitionSeqSerial = 0;
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 
     private string GeneratePetitionSequence()
@@ -38,7 +51,9 @@ public class PetitionList(ILogger<PetitionList> logger)
                 _lastPetitionSeqSerial++;
             }
 
-            return $"{_lastPetitionSeqDate:yyyyMMdd}{_lastPetitionSeqSerial:000000}";
+            var seq = $"{_lastPetitionSeqDate:yyyyMMdd}{_lastPetitionSeqSerial:000000}";
+            _logger.LogDebug("Generated petition sequence: {Seq}", seq);
+            return seq;
         }
     }
 
@@ -53,56 +68,102 @@ public class PetitionList(ILogger<PetitionList> logger)
     {
         petition = new Petition();
 
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            _logger.LogWarning("Empty petition content from user {User}", user.CharName);
+            return PetitionErrorCode.UnexpectedPetitionId;
+        }
+
         lock (_lock)
         {
-            // Validate
-            if (!Category.IsValid(category))
-                return PetitionErrorCode.UnexpectedCategory;
-
-            if (_activePetitions.Count >= Config.MaxActivePetition)
-                return PetitionErrorCode.TooManyPetitions;
-
-            if (GetPetition(worldId, user.CharUid) != null)
-                return PetitionErrorCode.CharAlreadySubmitted;
-
-            // Set up petition
-            petition.PetitionSeq = GeneratePetitionSequence();
-            petition.WorldId = worldId;
-            petition.Category = category;
-            petition.User = user;
-            petition.Content = content;
-            petition.ForcedGm = forcedGm;
-            petition.Info = info;
-            petition.State = State.Submit;
-            petition.Grade = Grade.GMS;
-            petition.SubmitTime = DateTime.Now;
-            petition.PetitionId = ++_lastPetitionId;
-
-            // Set quota
-            petition.QuotaAtSubmit = Quota.GetCurrentQuota(user.AccountUid);
-            petition.QuotaAfterTreat = petition.QuotaAtSubmit + 1;
-
-            if (petition.QuotaAtSubmit >= Config.MaxQuota)
-                return PetitionErrorCode.ExceedQuota;
-
-            // Add to tracking collections
-            _activePetitions.Add(petition.PetitionId, petition);
-
-            if (!_worldPetitions.TryGetValue(worldId, out var worldPetitions))
+            try
             {
-                worldPetitions = [];
-                _worldPetitions[worldId] = worldPetitions;
+                // Basic validation
+                if (!Category.IsValid(category))
+                {
+                    _logger.LogWarning("Invalid category: {Category}", category);
+                    return PetitionErrorCode.UnexpectedCategory;
+                }
+
+                if (_activePetitions.Count >= Config.MaxActivePetition)
+                {
+                    _logger.LogWarning("Max active petitions reached");
+                    return PetitionErrorCode.TooManyPetitions;
+                }
+
+                if (GetPetition(worldId, user.CharUid) != null)
+                {
+                    _logger.LogWarning("User already has active petition - CharUid: {CharUid}", user.CharUid);
+                    return PetitionErrorCode.CharAlreadySubmitted;
+                }
+
+                // Generate sequence
+                if (_lastPetitionSeqDate == DateTime.Today)
+                {
+                    _lastPetitionSeqSerial++;
+                }
+                else
+                {
+                    _lastPetitionSeqDate = DateTime.Today;
+                    _lastPetitionSeqSerial = 1;
+                }
+
+                var sequenceStr = _lastPetitionSeqDate.ToString("yyyyMMdd") +
+                                _lastPetitionSeqSerial.ToString("000000");
+
+                // Set up petition
+                petition.PetitionSeq = sequenceStr;
+                petition.WorldId = worldId;
+                petition.Category = category;
+                petition.User = user;
+                petition.Content = content;
+                petition.ForcedGm = forcedGm;
+                petition.Info = info;
+                petition.State = State.Submit;
+                petition.Grade = Grade.GMS;
+                petition.SubmitTime = DateTime.Now;
+                petition.PetitionId = ++_lastPetitionId;
+
+                // Get quota if not forced GM petition
+                if (forcedGm.CharUid == 0)
+                {
+                    petition.QuotaAtSubmit = Quota.GetCurrentQuota(user.AccountUid);
+                    petition.QuotaAfterTreat = petition.QuotaAtSubmit + 1;
+
+                    if (petition.QuotaAtSubmit >= Config.MaxQuota)
+                    {
+                        _logger.LogWarning("User exceeded quota limit: {User}", user.CharName);
+                        return PetitionErrorCode.ExceedQuota;
+                    }
+                }
+
+                // Store in memory
+                _activePetitions.Add(petition.PetitionId, petition);
+
+                if (!_worldPetitions.TryGetValue(worldId, out var worldPetitions))
+                {
+                    worldPetitions = new Dictionary<int, Petition>();
+                    _worldPetitions[worldId] = worldPetitions;
+                }
+
+                worldPetitions[petition.PetitionId] = petition;
+
+                _logger.LogInformation(
+                    "Created petition - ID: {PetitionId}, Seq: {Seq}, User: {User}, Category: {Category}, Content: {ContentPreview}",
+                    petition.PetitionId,
+                    petition.PetitionSeq,
+                    petition.User.CharName,
+                    petition.Category,
+                    content.Length > 50 ? content[..47] + "..." : content
+                );
+
+                return PetitionErrorCode.Success;
             }
-
-            worldPetitions[petition.PetitionId] = petition;
-
-            // Update quota if not forced GM petition
-            if (forcedGm.CharUid == 0)
+            catch (Exception ex)
             {
-                Quota.UpdateQuota(user.AccountUid, 1);
+                _logger.LogError(ex, "Error creating petition");
+                return PetitionErrorCode.DatabaseFail;
             }
-
-            return PetitionErrorCode.Success;
         }
     }
 

@@ -8,7 +8,7 @@ namespace PetitionD.UI.Forms;
 
 public partial class MainForm : Form
 {
-    private readonly AppSettings _settings = new();
+    private readonly AppSettings _settings;
     private readonly RichTextBox _consoleOutput;
     private readonly StatusStrip _statusStrip;
     private readonly ToolStripStatusLabel _petitionCountLabel;
@@ -19,7 +19,6 @@ public partial class MainForm : Form
     private readonly ListView _connectionsListView;
     private readonly ListView _packetsListView;
     private bool _isRunning;
-
 
     public MainForm(AppSettings settings, ServerService serverService)
     {
@@ -189,7 +188,15 @@ public partial class MainForm : Form
             var item = _packetsListView.SelectedItems[0];
             var text = string.Join("\t", Enumerable.Range(0, item.SubItems.Count)
                 .Select(i => item.SubItems[i].Text));
-            Clipboard.SetText(text);
+
+            // Use a new thread with STA apartment state to set the clipboard text
+            Thread thread = new Thread(() =>
+            {
+                Clipboard.SetText(text);
+            });
+            thread.SetApartmentState(ApartmentState.STA); // Set the thread to STA
+            thread.Start();
+            thread.Join(); // Wait for the thread to end
         }
     }
 
@@ -281,7 +288,27 @@ public partial class MainForm : Form
     }
 
     // Status methods - these will be updated later with real implementation
-    private static int GetActivePetitionCount() => 0;
-    private static int GetGmCount() => 0;
-    private static int GetWorldCount() => 0;
+    // File: UI/Forms/MainForm.cs
+    // Replace the stub methods with:
+
+    private int GetActivePetitionCount()
+    {
+        if (_serverService == null) return 0;
+        // TODO: Implement by accessing PetitionList service
+        return 0;
+    }
+
+    private int GetGmCount()
+    {
+        if (_serverService == null) return 0;
+        // TODO: Get from GmSessionList
+        return 0;
+    }
+
+    private int GetWorldCount()
+    {
+        if (_serverService == null) return 0;
+        // TODO: Get from WorldSessionList
+        return 0;
+    }
 }

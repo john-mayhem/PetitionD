@@ -1,5 +1,5 @@
 ﻿// File: Infrastructure/Network/Sessions/ISession.cs
-using NC.ToolNet.Net.Server;
+using NC.ToolNet.Networking.Server;
 using System.Net;
 using System.Net.Sockets;
 

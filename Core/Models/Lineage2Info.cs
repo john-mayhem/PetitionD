@@ -1,4 +1,4 @@
-using NC.ToolNet.Net;
+using NC.ToolNet.Networking.Protocol;
 
 namespace PetitionD.Core.Models;
 

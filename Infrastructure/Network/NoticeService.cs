@@ -1,7 +1,7 @@
 ﻿// File: Infrastructure/Network/NoticeService.cs
 using System.Net;
 using System.Net.Sockets;
-using NC.ToolNet.Net.Server;
+using NC.ToolNet.Networking.Server;
 using PetitionD.Configuration;
 
 namespace PetitionD.Infrastructure.Network;
